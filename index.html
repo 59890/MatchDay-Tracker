@@ -71,7 +71,7 @@
 
     .container { max-width: 600px; margin: 0 auto; padding: 10px 12px; }
 
-    /* Top Bar avec Écusson DLY agrandi */
+    /* Top Bar avec Écusson DLY */
     .app-topbar {
       display: flex;
       align-items: center;
@@ -110,9 +110,10 @@
       box-shadow: var(--shadow-card);
     }
 
+    /* En-tête centré en grille symétrique */
     .match-meta {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
       font-size: 0.75rem;
       font-weight: 800;
@@ -120,6 +121,10 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       margin-bottom: 10px;
+    }
+
+    #match-period-label {
+      text-align: left;
     }
 
     .match-timer-badge {
@@ -130,6 +135,11 @@
       font-weight: 900;
       font-size: 0.88rem;
       font-variant-numeric: tabular-nums;
+      justify-self: center;
+    }
+
+    #match-date-label {
+      text-align: right;
     }
 
     .teams-score-row {
@@ -595,7 +605,7 @@
 
 <div class="container">
 
-  <!-- TOP BAR BRAND AVEC LOGO DLY RENFORCÉ ET AGRANDI -->
+  <!-- TOP BAR BRAND AVEC LOGO DLY -->
   <header class="app-topbar">
     <div class="brand-left">
       <svg class="logo-dly-badge" viewBox="0 0 100 100" width="50" height="50" id="header-logo-svg">
@@ -605,11 +615,8 @@
             <stop offset="100%" stop-color="#0b1120"/>
           </linearGradient>
         </defs>
-        <!-- Écusson renforcé -->
         <path d="M 50 3 L 94 18 L 94 62 C 94 82 50 97 50 97 C 50 97 6 82 6 62 L 6 18 Z" fill="url(#shieldGrad)" stroke="var(--team-a)" stroke-width="7"/>
-        <!-- Étoile club -->
         <polygon points="50,14 52.5,20.5 59.5,20.5 54,24.5 56,31 50,27 44,31 46,24.5 40.5,20.5 47.5,20.5" fill="var(--team-a)"/>
-        <!-- DLY ultra lisible et gras -->
         <text x="50" y="68" fill="var(--team-a)" font-size="34" font-weight="900" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" letter-spacing="-1">DLY</text>
       </svg>
       <span class="brand-text">MatchDay <span style="color:var(--team-a);">Tracker</span></span>
@@ -1986,7 +1993,7 @@
       xctx.fillRect(0, 0, w, h);
     }
 
-    // Logo DLY agrandi (taille 68 au lieu de 52)
+    // Logo DLY agrandi
     drawDLYLogoOnCanvas(xctx, 42, 34, 68);
 
     // Titre d'en-tête
