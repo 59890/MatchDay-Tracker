@@ -71,7 +71,7 @@
 
     .container { max-width: 620px; margin: 0 auto; padding: 10px; }
 
-    /* Top Bar */
+    /* Top Bar avec Logo DLY Pro Club */
     .app-topbar {
       display: flex;
       align-items: center;
@@ -84,11 +84,12 @@
     .brand-left {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
 
     .logo-dly-badge {
       display: block;
+      filter: drop-shadow(0 2px 5px rgba(0,0,0,0.25));
     }
 
     .brand-text {
@@ -101,9 +102,9 @@
 
     .brand-sub {
       font-size: 0.65rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      letter-spacing: 0.08em;
+      font-weight: 700;
+      color: var(--team-a);
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       margin-left: 4px;
     }
@@ -293,7 +294,7 @@
       background: var(--btn-secondary);
     }
 
-    /* Terrain */
+    /* Pitch */
     .pitch-container {
       position: relative;
       width: 100%;
@@ -573,7 +574,7 @@
       width: 100%;
       height: auto;
       border-radius: var(--radius);
-      background: #ffffff;
+      background: #090d16;
       border: 1px solid var(--card-border);
       display: block;
       margin-bottom: 10px;
@@ -638,16 +639,27 @@
 
 <div class="container">
 
-  <!-- TOP BAR BRAND AVEC LOGO DLY PRO -->
+  <!-- TOP BAR BRAND AVEC LOGO DLY PRO CLUB -->
   <header class="app-topbar">
     <div class="brand-left">
-      <svg class="logo-dly-badge" viewBox="0 0 100 100" width="36" height="36" id="header-logo-svg">
-        <rect x="8" y="8" width="84" height="84" rx="6" fill="#0f172a" stroke="var(--team-a)" stroke-width="6"/>
-        <polygon points="50,16 52.5,22 59,22 54,26 56,32 50,28 44,32 46,26 41,22 47.5,22" fill="var(--team-a)"/>
-        <text x="50" y="66" fill="var(--team-a)" font-size="28" font-weight="900" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif" letter-spacing="-1">DLY</text>
+      <svg class="logo-dly-badge" viewBox="0 0 100 100" width="38" height="38" id="header-logo-svg">
+        <defs>
+          <linearGradient id="crestGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#1e293b"/>
+            <stop offset="100%" stop-color="#0b1120"/>
+          </linearGradient>
+        </defs>
+        <!-- Écusson affûté et biseauté -->
+        <polygon points="50,4 92,18 84,72 50,96 16,72 8,18" fill="url(#crestGrad)" stroke="var(--team-a)" stroke-width="5"/>
+        <polygon points="50,11 85,23 78,68 50,88 22,68 15,23" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+        <!-- Étoile club supérieure -->
+        <polygon points="50,16 52.5,21.5 58,21.5 53.5,25 55.5,30.5 50,27 44.5,30.5 46.5,25 42,21.5 47.5,21.5" fill="var(--team-a)"/>
+        <!-- Monogramme DLY athlétique -->
+        <text x="50" y="62" fill="#ffffff" font-size="25" font-weight="900" text-anchor="middle" font-family="'Impact', -apple-system, sans-serif" letter-spacing="1">DLY</text>
+        <line x1="30" y1="70" x2="70" y2="70" stroke="var(--team-a)" stroke-width="3" stroke-linecap="round"/>
       </svg>
       <div>
-        <span class="brand-text">MatchDay</span><span class="brand-sub">Analytics</span>
+        <span class="brand-text">MatchDay</span><span class="brand-sub">DLY</span>
       </div>
     </div>
   </header>
@@ -694,7 +706,6 @@
   <!-- ================= ONGLET 1 : TERRAIN & ACTIONS ================= -->
   <section id="tab-pitch" class="view-tab active">
 
-    <!-- SELECTEUR D'ÉQUIPE -->
     <div class="team-switch-bar">
       <button class="team-switch-btn active team-a" id="switch-team-a" onclick="selectTeam('a')">
         <span id="label-switch-a">Notre Équipe</span>
@@ -704,7 +715,6 @@
       </button>
     </div>
     
-    <!-- ACTIONS (SANS EMOJIS) -->
     <div class="event-selector">
       <button class="action-btn active" id="act-goal" onclick="selectAction('goal')">
         <span class="indicator-dot" style="background:var(--team-a);"></span> But
@@ -726,7 +736,6 @@
       </button>
     </div>
 
-    <!-- TERRAIN EN CANVAS -->
     <div class="pitch-container">
       <canvas id="pitchCanvas" width="600" height="380"></canvas>
     </div>
@@ -739,7 +748,6 @@
       <span>■ Rouge</span>
     </div>
 
-    <!-- STATS COMPARATIVES -->
     <div class="card">
       <div class="card-title">Statistiques du match</div>
       <div class="stat-comparison-row">
@@ -769,7 +777,6 @@
       </div>
     </div>
 
-    <!-- FIL DU MATCH -->
     <div class="card">
       <div class="card-title">Chronologie des événements</div>
       <div id="events-timeline" style="max-height:160px; overflow-y:auto; font-size:0.78rem;">
@@ -802,7 +809,6 @@
       </button>
     </div>
 
-    <!-- ÉTAT DE SCANNING OCR -->
     <div id="scan-progress-box" style="display:none; background:var(--card); border:1px solid var(--blue); padding:10px; border-radius:var(--radius); margin-bottom:10px; text-align:center;">
       <div style="font-size:0.78rem; font-weight:800; color:var(--blue); text-transform:uppercase;" id="scan-status-text">Analyse optique...</div>
       <div style="width:100%; height:4px; background:var(--card-border); border-radius:2px; margin-top:6px; overflow:hidden;">
@@ -810,7 +816,6 @@
       </div>
     </div>
 
-    <!-- TITULAIRES -->
     <div class="card">
       <div class="card-title" style="justify-content:space-between;">
         <span>Titulaires (<span id="count-starters">0</span>)</span>
@@ -818,7 +823,6 @@
       <div id="lineup-starters"></div>
     </div>
 
-    <!-- REMPLAÇANTS -->
     <div class="card">
       <div class="card-title" style="justify-content:space-between;">
         <span>Remplaçants (<span id="count-subs">0</span>)</span>
@@ -828,30 +832,30 @@
 
   </section>
 
-  <!-- ================= ONGLET 3 : RAPPORT D'APRÈS-MATCH ================= -->
+  <!-- ================= ONGLET 3 : AFFICHE DE SYNTHÈSE (FORMAT RÉSEAUX SOCIAUX) ================= -->
   <section id="tab-export" class="view-tab">
 
     <div class="card">
-      <div class="card-title">Feuille de synthèse d'après-match</div>
+      <div class="card-title">Visuel officiel de rencontre (Instagram / WhatsApp)</div>
       <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;">
-        Export haute résolution au format officiel pour publication et archivage.
+        Format vertical 4:5 haute définition avec jauges de confrontation et carte des tirs.
       </p>
 
-      <canvas id="exportCanvas" width="800" height="1040"></canvas>
+      <canvas id="exportCanvas" width="1080" height="1350"></canvas>
 
       <div style="display:flex; gap:6px; margin-top:8px;">
         <button class="btn-primary" onclick="downloadExportImage()">
-          Télécharger PNG
+          Télécharger l'image (PNG)
         </button>
         <button class="btn-primary" style="background:#0f172a; color:#fff;" onclick="shareExportImage()">
-          Partager
+          Partager sur les réseaux
         </button>
       </div>
     </div>
 
   </section>
 
-  <!-- ================= ONGLET 4 : CONFIGURATION & THÈME ================= -->
+  <!-- ================= ONGLET 4 : STYLE ================= -->
   <section id="tab-theme" class="view-tab">
 
     <div class="card">
@@ -987,7 +991,7 @@
 
     <div class="form-group">
       <label>Nom ou prénom</label>
-      <input type="text" id="modal-player-name" class="form-input" placeholder="Ex: Delannoy">
+      <input type="text" id="modal-player-name" class="form-input" placeholder="Ex: Dupont">
     </div>
 
     <div class="form-group">
@@ -1048,7 +1052,7 @@
       Collez la liste brute (notes, message, document) :
     </p>
 
-    <textarea id="raw-compo-textarea" style="width:100%; height:140px; padding:8px; border:1px solid var(--card-border); background:var(--input-bg); color:var(--text); border-radius:var(--radius-sm); font-size:0.78rem; font-family:ui-monospace, monospace; margin-bottom:10px;" placeholder="1. Thomas GK&#10;2. Lucas DF&#10;4. Romain DF&#10;8. Paul MD&#10;9. Arthur AT&#10;Remplaçants :&#10;12. Hugo"></textarea>
+    <textarea id="raw-compo-textarea" style="width:100%; height:140px; padding:8px; border:1px solid var(--card-border); background:var(--input-bg); color:var(--text); border-radius:var(--radius-sm); font-size:0.78rem; font-family:ui-monospace, monospace; margin-bottom:10px;" placeholder="1. Thomas GK&#10;2. Lucas DF&#10;4. Martin DF&#10;8. Paul MD&#10;9. Arthur AT&#10;Remplaçants :&#10;12. Hugo"></textarea>
 
     <button class="btn-primary" onclick="parseTextCompo()">
       Traiter et importer
@@ -1068,7 +1072,7 @@
   </button>
   <button class="nav-btn" onclick="switchNav('export')">
     <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-    <span>Rapport</span>
+    <span>Affiche</span>
   </button>
   <button class="nav-btn" onclick="switchNav('theme')">
     <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 3v18"></path><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"></path></svg>
@@ -1102,7 +1106,6 @@
     players: []
   };
 
-  /* ROSTER DEFAULT TEMPLATE */
   const defaultRoster = [
     { id: 1, name: "Gardien", num: 1, pos: "GK", isPlaying: true, minPlayed: 0, yellows: 0, red: false },
     { id: 2, name: "Défenseur D", num: 2, pos: "DEF", isPlaying: true, minPlayed: 0, yellows: 0, red: false },
@@ -1673,7 +1676,7 @@
     }
   }
 
-  /* PITCH CANVAS DRAWING (STYLE ÉPURÉ TACTIQUE) */
+  /* PITCH CANVAS DRAWING */
   const canvas = document.getElementById('pitchCanvas');
   const ctx = canvas.getContext('2d');
 
@@ -1684,7 +1687,6 @@
     ctx.fillStyle = matchData.theme.pitch;
     ctx.fillRect(0, 0, w, h);
 
-    // Lignes de tonte subtiles
     ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
     for (let i = 0; i < w; i += 50) {
       ctx.fillRect(i, 0, 25, h);
@@ -1712,7 +1714,6 @@
     drawPenaltyBox(16, (h - 140) / 2, 70, 140, 34, 70, true);
     drawPenaltyBox(w - 86, (h - 140) / 2, 70, 140, 34, 70, false);
 
-    // Marqueurs d'actions
     matchData.events.forEach(ev => {
       const px = (ev.x / 100) * w;
       const py = (ev.y / 100) * h;
@@ -1916,24 +1917,46 @@
     document.getElementById('stat-reds-b').textContent = redsB;
   }
 
-  /* LOGO DLY SUR LE CANVAS DE RAPPORT */
+  /* DESSIN DU NOUVEAU LOGO DLY SUR LE CANVAS (STYLE VECTORIEL PREMIUM) */
   function drawDLYLogoOnCanvas(xctx, x, y, size) {
     xctx.save();
     xctx.translate(x, y);
     const scale = size / 100;
     xctx.scale(scale, scale);
 
+    // Écusson profilé
     xctx.beginPath();
-    xctx.rect(8, 8, 84, 84);
-    xctx.fillStyle = "#0f172a";
+    xctx.moveTo(50, 4);
+    xctx.lineTo(92, 18);
+    xctx.lineTo(84, 72);
+    xctx.lineTo(50, 96);
+    xctx.lineTo(16, 72);
+    xctx.lineTo(8, 18);
+    xctx.closePath();
+
+    xctx.fillStyle = "#0a0f1d";
     xctx.fill();
     xctx.strokeStyle = matchData.theme.teamA;
-    xctx.lineWidth = 6;
+    xctx.lineWidth = 5;
     xctx.stroke();
 
+    // Liseré interne biseauté
+    xctx.beginPath();
+    xctx.moveTo(50, 11);
+    xctx.lineTo(85, 23);
+    xctx.lineTo(78, 68);
+    xctx.lineTo(50, 88);
+    xctx.lineTo(22, 68);
+    xctx.lineTo(15, 23);
+    xctx.closePath();
+    xctx.strokeStyle = "rgba(255,255,255,0.2)";
+    xctx.lineWidth = 1.5;
+    xctx.stroke();
+
+    // Étoile de club
     xctx.fillStyle = matchData.theme.teamA;
     xctx.beginPath();
-    const star = [[50,16],[52.5,22],[59,22],[54,26],[56,32],[50,28],[44,32],[46,26],[41,22],[47.5,22]];
+    const star = [[50,16],[52.5,21.5],[58,21.5],[53.5,25],[55.5,30.5],[50,27],[44.5,30.5],[46.5,25],[42,21.5],[47.5,21.5]];
     star.forEach((pt, i) => {
       if (i === 0) xctx.moveTo(pt[0], pt[1]);
       else xctx.lineTo(pt[0], pt[1]);
@@ -1941,121 +1964,229 @@
     xctx.closePath();
     xctx.fill();
 
-    xctx.font = "900 28px -apple-system, sans-serif";
-    xctx.fillStyle = matchData.theme.teamA;
+    // DLY
+    xctx.font = "900 25px 'Impact', -apple-system, sans-serif";
+    xctx.fillStyle = "#ffffff";
     xctx.textAlign = "center";
     xctx.textBaseline = "middle";
-    xctx.fillText("DLY", 50, 64);
+    xctx.fillText("DLY", 50, 56);
+
+    // Ligne sous le monogramme
+    xctx.beginPath();
+    xctx.moveTo(30, 68);
+    xctx.lineTo(70, 68);
+    xctx.strokeStyle = matchData.theme.teamA;
+    xctx.lineWidth = 3.5;
+    xctx.lineCap = "round";
+    xctx.stroke();
 
     xctx.restore();
   }
 
-  /* RAPPORT D'APRÈS-MATCH OFFICIEL */
+  /* NOUVEAU RENDU AFFICHE SOCIAL MEDIA (INSTAGRAM 1080x1350) */
   function renderExportCanvas() {
     const expCanvas = document.getElementById('exportCanvas');
     const xctx = expCanvas.getContext('2d');
-    const w = expCanvas.width;
-    const h = expCanvas.height;
+    const w = 1080;
+    const h = 1350;
 
-    const isLight = matchData.themeMode === 'light';
+    expCanvas.width = w;
+    expCanvas.height = h;
 
-    xctx.fillStyle = isLight ? "#ffffff" : "#090d16";
+    // 1. FOND SOMBRE ATMOSPHÈRE DE STADE
+    const bgGrad = xctx.createLinearGradient(0, 0, w, h);
+    bgGrad.addColorStop(0, "#080c14");
+    bgGrad.addColorStop(0.5, "#0d1527");
+    bgGrad.addColorStop(1, "#05070c");
+    xctx.fillStyle = bgGrad;
     xctx.fillRect(0, 0, w, h);
 
-    // Bordure technique
-    xctx.strokeStyle = isLight ? "#d0d7de" : "#1f2937";
+    // Halo lumineux central derrière le score
+    const glow = xctx.createRadialGradient(w / 2, 280, 10, w / 2, 280, 360);
+    glow.addColorStop(0, "rgba(2, 132, 199, 0.22)");
+    glow.addColorStop(1, "rgba(0, 0, 0, 0)");
+    xctx.fillStyle = glow;
+    xctx.fillRect(0, 50, w, 500);
+
+    // Bandes graphiques sportives diagonales très subtiles
+    xctx.strokeStyle = "rgba(255, 255, 255, 0.02)";
+    xctx.lineWidth = 30;
+    for (let x = -200; x < w + 400; x += 120) {
+      xctx.beginPath();
+      xctx.moveTo(x, 0);
+      xctx.lineTo(x - 300, h);
+      xctx.stroke();
+    }
+
+    // Bordure d'encadrement biseautée
+    xctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
     xctx.lineWidth = 2;
-    xctx.strokeRect(18, 18, w - 36, h - 36);
+    xctx.strokeRect(30, 30, w - 60, h - 60);
 
-    // Header bar
-    drawDLYLogoOnCanvas(xctx, 42, 36, 54);
+    // 2. HEADER BAR & LOGO DLY
+    drawDLYLogoOnCanvas(xctx, 70, 65, 75);
 
-    xctx.fillStyle = isLight ? "#090a0c" : "#f9fafb";
-    xctx.font = "800 18px -apple-system, sans-serif";
+    // Badge "FULL TIME" central
+    xctx.fillStyle = "rgba(255, 255, 255, 0.08)";
+    xctx.fillRect(w / 2 - 120, 68, 240, 38);
+    xctx.strokeStyle = "rgba(255, 255, 255, 0.25)";
+    xctx.lineWidth = 1;
+    xctx.strokeRect(w / 2 - 120, 68, 240, 38);
+
+    xctx.fillStyle = "#f8fafc";
+    xctx.font = "800 15px -apple-system, sans-serif";
     xctx.textAlign = "center";
-    xctx.fillText("RAPPORT OFFICIEL DE RENCONTRE", w / 2, 65);
+    xctx.letterSpacing = "2px";
+    xctx.fillText("SCORE FINAL • FT", w / 2, 92);
 
-    // Équipes
+    // Date / Watermark top right
+    const dateStr = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+    xctx.fillStyle = "#64748b";
+    xctx.font = "700 14px ui-monospace, monospace";
+    xctx.textAlign = "right";
+    xctx.fillText(dateStr, w - 70, 92);
+
+    // 3. SCOREBOARD CARD PRO
+    const teamAY = 200;
+    
+    // Noms des équipes (typographie athlétique imposante)
+    xctx.font = "900 36px 'Impact', -apple-system, sans-serif";
     xctx.fillStyle = matchData.theme.teamA;
-    xctx.font = "800 24px -apple-system, sans-serif";
-    xctx.fillText(matchData.teamA.toUpperCase(), w / 4, 130);
+    xctx.textAlign = "center";
+    xctx.fillText(matchData.teamA.toUpperCase(), w * 0.26, teamAY);
 
     xctx.fillStyle = matchData.theme.teamB;
-    xctx.fillText(matchData.teamB.toUpperCase(), (w / 4) * 3, 130);
+    xctx.fillText(matchData.teamB.toUpperCase(), w * 0.74, teamAY);
 
-    // Score
-    xctx.fillStyle = isLight ? "#090a0c" : "#ffffff";
-    xctx.font = "900 80px ui-monospace, SFMono-Regular, monospace";
-    xctx.fillText(`${matchData.scoreA} - ${matchData.scoreB}`, w / 2, 205);
+    // Chiffres du score géants
+    xctx.font = "900 120px ui-monospace, SFMono-Regular, monospace";
+    xctx.fillStyle = "#ffffff";
+    xctx.textAlign = "center";
+    xctx.shadowColor = "rgba(0,0,0,0.8)";
+    xctx.shadowBlur = 15;
+    xctx.fillText(`${matchData.scoreA}  :  ${matchData.scoreB}`, w / 2, teamAY + 105);
+    xctx.shadowBlur = 0;
 
-    // Buteurs
-    xctx.fillStyle = "#57606a";
-    xctx.font = "700 13px -apple-system, sans-serif";
-    xctx.fillText("BUTEURS", w / 2, 255);
+    // 4. BUTEURS DU MATCH (SCINDÉS DOMICILE / EXTÉRIEUR)
+    const goalsA = matchData.events.filter(e => e.type === 'goal' && e.team === 'a');
+    const goalsB = matchData.events.filter(e => e.type === 'goal' && e.team === 'b');
 
-    const goals = matchData.events.filter(e => e.type === 'goal');
-    xctx.fillStyle = isLight ? "#090a0c" : "#ffffff";
-    xctx.font = "600 15px -apple-system, sans-serif";
-
-    if (!goals.length) {
-      xctx.fillStyle = "#8c959f";
-      xctx.fillText("Aucun but inscrit", w / 2, 282);
+    xctx.font = "600 16px -apple-system, sans-serif";
+    
+    // Domicile
+    xctx.fillStyle = "#94a3b8";
+    xctx.textAlign = "center";
+    if (goalsA.length === 0 && matchData.scoreA > 0) {
+      xctx.fillText(`${matchData.scoreA} but(s)`, w * 0.26, teamAY + 155);
     } else {
-      goals.slice(0, 3).forEach((g, i) => {
-        const teamPrefix = g.team === 'a' ? matchData.teamA : matchData.teamB;
-        xctx.fillText(`${g.min}' ${g.player} (${teamPrefix})`, w / 2, 282 + i * 22);
+      goalsA.slice(0, 3).forEach((g, idx) => {
+        xctx.fillText(`⚽ ${g.player} ${g.min}'`, w * 0.26, teamAY + 155 + idx * 24);
       });
     }
 
-    const statsY = 370;
-    xctx.strokeStyle = isLight ? "#e1e4e8" : "#1f2937";
-    xctx.lineWidth = 1;
-    xctx.beginPath();
-    xctx.moveTo(70, statsY);
-    xctx.lineTo(w - 70, statsY);
-    xctx.stroke();
+    // Extérieur
+    if (goalsB.length === 0 && matchData.scoreB > 0) {
+      xctx.fillText(`${matchData.scoreB} but(s)`, w * 0.74, teamAY + 155);
+    } else {
+      goalsB.slice(0, 3).forEach((g, idx) => {
+        xctx.fillText(`⚽ ${g.player} ${g.min}'`, w * 0.74, teamAY + 155 + idx * 24);
+      });
+    }
 
+    // 5. STATISTIQUES EN JAUGE VISUELLE COMPARATIVE
+    const statsTop = 490;
+
+    // Titre section
+    xctx.fillStyle = "#475569";
+    xctx.font = "800 13px -apple-system, sans-serif";
+    xctx.letterSpacing = "3px";
+    xctx.textAlign = "center";
+    xctx.fillText("STATISTIQUES DE CONFRONTATION", w / 2, statsTop);
+
+    // Calculs
     const shotsA = matchData.events.filter(e => e.team === 'a' && (e.type === 'goal' || e.type === 'onTarget' || e.type === 'offTarget')).length;
     const shotsB = matchData.events.filter(e => e.team === 'b' && (e.type === 'goal' || e.type === 'onTarget' || e.type === 'offTarget')).length;
+
     const targetA = matchData.events.filter(e => e.team === 'a' && (e.type === 'goal' || e.type === 'onTarget')).length;
     const targetB = matchData.events.filter(e => e.team === 'b' && (e.type === 'goal' || e.type === 'onTarget')).length;
+
     const foulsA = matchData.events.filter(e => e.team === 'a' && (e.type === 'foul' || e.type === 'yellowCard' || e.type === 'redCard')).length;
     const foulsB = matchData.events.filter(e => e.team === 'b' && (e.type === 'foul' || e.type === 'yellowCard' || e.type === 'redCard')).length;
+
     const yellowsA = matchData.events.filter(e => e.team === 'a' && e.type === 'yellowCard').length;
     const yellowsB = matchData.events.filter(e => e.team === 'b' && e.type === 'yellowCard').length;
-    const redsA = matchData.events.filter(e => e.team === 'a' && e.type === 'redCard').length;
-    const redsB = matchData.events.filter(e => e.team === 'b' && e.type === 'redCard').length;
 
-    drawStatRow(xctx, "Tirs totaux", shotsA, shotsB, statsY + 30, w, isLight);
-    drawStatRow(xctx, "Tirs cadrés", targetA, targetB, statsY + 65, w, isLight);
-    drawStatRow(xctx, "Fautes", foulsA, foulsB, statsY + 100, w, isLight);
-    drawStatRow(xctx, "Cartons jaunes", yellowsA, yellowsB, statsY + 135, w, isLight);
-    drawStatRow(xctx, "Cartons rouges", redsA, redsB, statsY + 170, w, isLight);
+    drawComparisonBar(xctx, "Tirs totaux", shotsA, shotsB, statsTop + 35, w);
+    drawComparisonBar(xctx, "Tirs cadrés", targetA, targetB, statsTop + 90, w);
+    drawComparisonBar(xctx, "Fautes commises", foulsA, foulsB, statsTop + 145, w);
+    drawComparisonBar(xctx, "Cartons jaunes", yellowsA, yellowsB, statsTop + 200, w);
 
-    const mapY = 605;
-    xctx.fillStyle = "#57606a";
-    xctx.font = "700 13px -apple-system, sans-serif";
-    xctx.fillText("DISTRIBUTION TACTIQUE DES ACTIONS", w / 2, mapY);
+    // 6. MINI TERRAIN TACTIQUE ENCADRÉ
+    const mapY = 790;
+    const mapW = 680;
+    const mapH = 380;
+    const mapX = (w - mapW) / 2;
 
-    xctx.drawImage(canvas, (w - 460) / 2, mapY + 15, 460, 280);
+    xctx.fillStyle = "rgba(255, 255, 255, 0.04)";
+    xctx.fillRect(mapX - 10, mapY - 35, mapW + 20, mapH + 48);
+    xctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
+    xctx.lineWidth = 1;
+    xctx.strokeRect(mapX - 10, mapY - 35, mapW + 20, mapH + 48);
 
-    xctx.fillStyle = "#8c959f";
-    xctx.font = "500 12px ui-monospace, monospace";
-    xctx.fillText("MATCHDAY TRACKER ANALYTICS", w / 2, h - 30);
+    xctx.fillStyle = "#94a3b8";
+    xctx.font = "800 13px -apple-system, sans-serif";
+    xctx.letterSpacing = "2px";
+    xctx.textAlign = "center";
+    xctx.fillText("DISTRIBUTION DES IMPACTS & ACTIONS", w / 2, mapY - 14);
+
+    // Dessin du pitch réel sur l'affiche
+    xctx.drawImage(canvas, mapX, mapY, mapW, mapH);
+
+    // 7. FOOTER BRANDING OFFICIEL
+    xctx.fillStyle = "#475569";
+    xctx.font = "700 14px ui-monospace, monospace";
+    xctx.letterSpacing = "2px";
+    xctx.textAlign = "center";
+    xctx.fillText("DLY SPORTS ANALYTICS • MATCHDAY TRACKER", w / 2, h - 55);
   }
 
-  function drawStatRow(xctx, label, valA, valB, y, w, isLight) {
-    xctx.fillStyle = isLight ? "#57606a" : "#9ca3af";
-    xctx.font = "700 13px -apple-system, sans-serif";
+  /* DESSIN D'UNE JAUGE DOUBLE DIRECTIONNELLE PRO */
+  function drawComparisonBar(xctx, label, valA, valB, y, w) {
+    const total = valA + valB;
+    const pctA = total === 0 ? 0.5 : Math.max(0.12, Math.min(0.88, valA / total));
+    
+    const barW = 540;
+    const barH = 8;
+    const barX = (w - barW) / 2;
+
+    // Label central
+    xctx.fillStyle = "#cbd5e1";
+    xctx.font = "700 14px -apple-system, sans-serif";
     xctx.textAlign = "center";
     xctx.fillText(label.toUpperCase(), w / 2, y);
 
+    // Chiffres A et B aux extrémités
+    xctx.font = "800 20px ui-monospace, SFMono-Regular, monospace";
     xctx.fillStyle = matchData.theme.teamA;
-    xctx.font = "800 18px ui-monospace, monospace";
-    xctx.fillText(valA.toString(), w / 4, y);
+    xctx.textAlign = "right";
+    xctx.fillText(valA.toString(), barX - 18, y + 16);
 
     xctx.fillStyle = matchData.theme.teamB;
-    xctx.fillText(valB.toString(), (w / 4) * 3, y);
+    xctx.textAlign = "left";
+    xctx.fillText(valB.toString(), barX + barW + 18, y + 16);
+
+    // Fond neutre de la barre
+    xctx.fillStyle = "#1e293b";
+    xctx.fillRect(barX, y + 8, barW, barH);
+
+    // Remplissage côté A
+    const fillA = barW * pctA;
+    xctx.fillStyle = matchData.theme.teamA;
+    xctx.fillRect(barX, y + 8, fillA - 2, barH);
+
+    // Remplissage côté B
+    xctx.fillStyle = matchData.theme.teamB;
+    xctx.fillRect(barX + fillA + 2, y + 8, barW - fillA - 2, barH);
   }
 
   function downloadExportImage() {
@@ -2063,7 +2194,7 @@
     const expCanvas = document.getElementById('exportCanvas');
     const image = expCanvas.toDataURL("image/png");
     const link = document.createElement('a');
-    link.download = `rapport_match_${matchData.teamA}_vs_${matchData.teamB}.png`;
+    link.download = `match_recap_${matchData.teamA}_vs_${matchData.teamB}.png`;
     link.href = image;
     link.click();
   }
@@ -2072,13 +2203,13 @@
     renderExportCanvas();
     const expCanvas = document.getElementById('exportCanvas');
     expCanvas.toBlob(async (blob) => {
-      const file = new File([blob], "rapport_match.png", { type: "image/png" });
+      const file = new File([blob], "match_recap.png", { type: "image/png" });
       if (navigator.share && navigator.canShare({ files: [file] })) {
         try {
           await navigator.share({
             files: [file],
-            title: `Score final : ${matchData.teamA} ${matchData.scoreA} - ${matchData.scoreB} ${matchData.teamB}`,
-            text: `Rapport de match synthétique généré sur le banc.`
+            title: `Résultat : ${matchData.teamA} vs ${matchData.teamB}`,
+            text: `Score final : ${matchData.scoreA} - ${matchData.scoreB} !`
           });
         } catch (err) {}
       } else {
