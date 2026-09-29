@@ -71,30 +71,30 @@
 
     .container { max-width: 600px; margin: 0 auto; padding: 10px 12px; }
 
-    /* Top Bar avec Écusson DLY */
+    /* Top Bar avec Écusson DLY agrandi */
     .app-topbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 6px 4px 10px;
+      padding: 6px 4px 12px;
     }
 
     .brand-left {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
 
     .logo-dly-badge {
       display: block;
-      filter: drop-shadow(0 2px 5px rgba(0,0,0,0.18));
+      filter: drop-shadow(0 3px 6px rgba(0,0,0,0.22));
       transition: transform 0.2s ease;
     }
 
     .logo-dly-badge:active { transform: scale(0.95); }
 
     .brand-text {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       font-weight: 900;
       letter-spacing: -0.02em;
       color: var(--text);
@@ -595,23 +595,22 @@
 
 <div class="container">
 
-  <!-- TOP BAR BRAND AVEC LOGO « DLY » -->
+  <!-- TOP BAR BRAND AVEC LOGO DLY RENFORCÉ ET AGRANDI -->
   <header class="app-topbar">
     <div class="brand-left">
-      <!-- Écusson Logo DLY Vectoriel -->
-      <svg class="logo-dly-badge" viewBox="0 0 100 100" width="38" height="38" id="header-logo-svg">
+      <svg class="logo-dly-badge" viewBox="0 0 100 100" width="50" height="50" id="header-logo-svg">
         <defs>
           <linearGradient id="shieldGrad" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stop-color="#1e293b"/>
             <stop offset="100%" stop-color="#0b1120"/>
           </linearGradient>
         </defs>
-        <!-- Contour de l'écusson -->
-        <path d="M 50 5 L 90 20 L 90 62 C 90 80 50 96 50 96 C 50 96 10 80 10 62 L 10 20 Z" fill="url(#shieldGrad)" stroke="var(--team-a)" stroke-width="6"/>
-        <!-- Étoile supérieure -->
-        <polygon points="50,17 52.5,23.5 59.5,23.5 54,27.5 56,34 50,30 44,34 46,27.5 40.5,23.5 47.5,23.5" fill="var(--team-a)"/>
-        <!-- Monogramme DLY -->
-        <text x="50" y="66" fill="var(--team-a)" font-size="25" font-weight="900" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" letter-spacing="-1.2">DLY</text>
+        <!-- Écusson renforcé -->
+        <path d="M 50 3 L 94 18 L 94 62 C 94 82 50 97 50 97 C 50 97 6 82 6 62 L 6 18 Z" fill="url(#shieldGrad)" stroke="var(--team-a)" stroke-width="7"/>
+        <!-- Étoile club -->
+        <polygon points="50,14 52.5,20.5 59.5,20.5 54,24.5 56,31 50,27 44,31 46,24.5 40.5,20.5 47.5,20.5" fill="var(--team-a)"/>
+        <!-- DLY ultra lisible et gras -->
+        <text x="50" y="68" fill="var(--team-a)" font-size="34" font-weight="900" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" letter-spacing="-1">DLY</text>
       </svg>
       <span class="brand-text">MatchDay <span style="color:var(--team-a);">Tracker</span></span>
     </div>
@@ -805,7 +804,7 @@
         Image générée avec score, buteurs, cartons, carte des tirs et logo officiel « DLY ».
       </p>
 
-      <canvas id="exportCanvas" width="800" height="1020"></canvas>
+      <canvas id="exportCanvas" width="800" height="1040"></canvas>
 
       <div style="display:flex; gap:8px;">
         <button class="btn-primary" onclick="downloadExportImage()">
@@ -1918,33 +1917,33 @@
     document.getElementById('stat-reds-b').textContent = redsB;
   }
 
-  /* TRACÉ DU BLASON DLY SUR LE CANVAS DE L'AFFICHE */
+  /* TRACÉ DU BLASON DLY AGRANDI & NET SUR CANVAS */
   function drawDLYLogoOnCanvas(xctx, x, y, size) {
     xctx.save();
     xctx.translate(x, y);
     const scale = size / 100;
     xctx.scale(scale, scale);
 
-    // Bouclier
+    // Bouclier sombre
     xctx.beginPath();
-    xctx.moveTo(50, 5);
-    xctx.lineTo(90, 20);
-    xctx.lineTo(90, 62);
-    xctx.quadraticCurveTo(90, 80, 50, 96);
-    xctx.quadraticCurveTo(10, 80, 10, 62);
-    xctx.lineTo(10, 20);
+    xctx.moveTo(50, 4);
+    xctx.lineTo(94, 18);
+    xctx.lineTo(94, 62);
+    xctx.quadraticCurveTo(94, 82, 50, 97);
+    xctx.quadraticCurveTo(6, 82, 6, 62);
+    xctx.lineTo(6, 18);
     xctx.closePath();
 
     xctx.fillStyle = "#0f172a";
     xctx.fill();
     xctx.strokeStyle = matchData.theme.teamA;
-    xctx.lineWidth = 6;
+    xctx.lineWidth = 6.5;
     xctx.stroke();
 
-    // Étoile de champion
+    // Étoile
     xctx.fillStyle = matchData.theme.teamA;
     xctx.beginPath();
-    const starPoints = [[50,17],[52.5,23.5],[59.5,23.5],[54,27.5],[56,34],[50,30],[44,34],[46,27.5],[40.5,23.5],[47.5,23.5]];
+    const starPoints = [[50,14],[52.5,20.5],[59.5,20.5],[54,24.5],[56,31],[50,27],[44,31],[46,24.5],[40.5,20.5],[47.5,20.5]];
     starPoints.forEach((pt, i) => {
       if (i === 0) xctx.moveTo(pt[0], pt[1]);
       else xctx.lineTo(pt[0], pt[1]);
@@ -1952,16 +1951,17 @@
     xctx.closePath();
     xctx.fill();
 
-    // Monogramme DLY
-    xctx.font = "900 25px -apple-system, sans-serif";
+    // DLY grand et très gras
+    xctx.font = "900 34px -apple-system, sans-serif";
+    xctx.fillStyle = matchData.theme.teamA;
     xctx.textAlign = "center";
     xctx.textBaseline = "middle";
-    xctx.fillText("DLY", 50, 62);
+    xctx.fillText("DLY", 50, 64);
 
     xctx.restore();
   }
 
-  /* POST-MATCH EXPORT CARD AVEC LOGO « DLY » */
+  /* POST-MATCH EXPORT CARD */
   function renderExportCanvas() {
     const expCanvas = document.getElementById('exportCanvas');
     const xctx = expCanvas.getContext('2d');
@@ -1986,32 +1986,32 @@
       xctx.fillRect(0, 0, w, h);
     }
 
-    // Dessin du blason DLY en haut à gauche
-    drawDLYLogoOnCanvas(xctx, 45, 36, 52);
+    // Logo DLY agrandi (taille 68 au lieu de 52)
+    drawDLYLogoOnCanvas(xctx, 42, 34, 68);
 
     // Titre d'en-tête
     xctx.fillStyle = matchData.theme.teamA;
     xctx.font = "bold 20px -apple-system, sans-serif";
     xctx.textAlign = "center";
-    xctx.fillText("MATCHDAY TRACKER • SCORE FINAL", w / 2, 68);
+    xctx.fillText("MATCHDAY TRACKER • SCORE FINAL", w / 2, 70);
 
     // Équipes
     xctx.fillStyle = matchData.theme.teamA;
     xctx.font = "bold 24px sans-serif";
-    xctx.fillText(matchData.teamA.toUpperCase(), w / 4, 128);
+    xctx.fillText(matchData.teamA.toUpperCase(), w / 4, 132);
 
     xctx.fillStyle = matchData.theme.teamB;
-    xctx.fillText(matchData.teamB.toUpperCase(), (w / 4) * 3, 128);
+    xctx.fillText(matchData.teamB.toUpperCase(), (w / 4) * 3, 132);
 
     // Score
     xctx.fillStyle = isLight ? "#0f172a" : "#ffffff";
     xctx.font = "900 84px sans-serif";
-    xctx.fillText(`${matchData.scoreA}  -  ${matchData.scoreB}`, w / 2, 205);
+    xctx.fillText(`${matchData.scoreA}  -  ${matchData.scoreB}`, w / 2, 210);
 
     // Buteurs
     xctx.fillStyle = "#0284c7";
     xctx.font = "bold 18px sans-serif";
-    xctx.fillText("BUTEURS DU MATCH", w / 2, 258);
+    xctx.fillText("BUTEURS DU MATCH", w / 2, 262);
 
     const goals = matchData.events.filter(e => e.type === 'goal');
     xctx.fillStyle = isLight ? "#334155" : "#ffffff";
@@ -2019,15 +2019,15 @@
 
     if (!goals.length) {
       xctx.fillStyle = "#94a3b8";
-      xctx.fillText("Aucun but inscrit", w / 2, 288);
+      xctx.fillText("Aucun but inscrit", w / 2, 292);
     } else {
       goals.slice(0, 3).forEach((g, i) => {
         const teamPrefix = g.team === 'a' ? matchData.teamA : matchData.teamB;
-        xctx.fillText(`⚽ ${g.player} (${g.min}') • [${teamPrefix}]`, w / 2, 288 + i * 24);
+        xctx.fillText(`⚽ ${g.player} (${g.min}') • [${teamPrefix}]`, w / 2, 292 + i * 24);
       });
     }
 
-    const statsY = 370;
+    const statsY = 375;
     xctx.strokeStyle = isLight ? "#cbd5e1" : "rgba(255, 255, 255, 0.1)";
     xctx.lineWidth = 1.5;
     xctx.beginPath();
@@ -2052,7 +2052,7 @@
     drawStatRow(xctx, "Cartons Jaunes 🟨", yellowsA, yellowsB, statsY + 135, w, isLight);
     drawStatRow(xctx, "Cartons Rouges 🟥", redsA, redsB, statsY + 170, w, isLight);
 
-    const mapY = 600;
+    const mapY = 610;
     xctx.fillStyle = matchData.theme.teamA;
     xctx.font = "bold 20px sans-serif";
     xctx.fillText("CARTE DES ACTIONS (TIRS & DISCIPLINE)", w / 2, mapY);
