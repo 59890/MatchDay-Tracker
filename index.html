@@ -10,8 +10,10 @@
   <meta name="apple-mobile-web-app-title" content="MatchTracker">
   <meta name="theme-color" content="#ffffff">
 
+  <!-- Tesseract.js pour l'OCR de photos de composition -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
   <style>
-    /* Variables dynamiques Mode Clair (défaut) */
     :root[data-theme="light"] {
       --bg: #f1f5f9;
       --card: #ffffff;
@@ -26,7 +28,6 @@
       --shadow-card: 0 4px 14px -2px rgba(15, 23, 42, 0.06);
     }
 
-    /* Variables Mode Sombre (optionnel via l'onglet Thème) */
     :root[data-theme="dark"] {
       --bg: #0b1120;
       --card: #1e293b;
@@ -68,9 +69,38 @@
       transition: background 0.2s ease, color 0.2s ease;
     }
 
-    .container { max-width: 600px; margin: 0 auto; padding: 12px; }
+    .container { max-width: 600px; margin: 0 auto; padding: 10px 12px; }
 
-    /* Tableau d'affichage supérieur */
+    /* Top Brand Bar avec Logo R */
+    .app-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 4px 10px;
+    }
+
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-r-badge {
+      display: block;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+      transition: transform 0.2s ease;
+    }
+
+    .logo-r-badge:active { transform: scale(0.95); }
+
+    .brand-text {
+      font-size: 1.1rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    /* Scoreboard */
     .scoreboard {
       background: var(--scoreboard-bg);
       border: 1px solid var(--card-border);
@@ -172,7 +202,7 @@
 
     .btn-timer.active { background: var(--team-a); color: var(--team-a-text); border-color: var(--team-a); }
 
-    /* Sélecteur d'équipe (Nous / Eux) */
+    /* Switcher Domicile / Adversaire */
     .team-switch-bar {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -203,7 +233,7 @@
     .team-switch-btn.active.team-a { background: var(--team-a); color: var(--team-a-text); }
     .team-switch-btn.active.team-b { background: var(--team-b); color: var(--team-b-text); }
 
-    /* Grille d'actions */
+    /* Actions */
     .event-selector {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -225,7 +255,6 @@
       flex-direction: column;
       align-items: center;
       gap: 3px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
     }
 
     .action-btn span { font-size: 1.1rem; }
@@ -270,7 +299,7 @@
       gap: 4px;
     }
 
-    /* Cartes d'affichage */
+    /* Cards */
     .card {
       background: var(--card);
       border: 1px solid var(--card-border);
@@ -290,7 +319,7 @@
       color: var(--text);
     }
 
-    /* Tableau comparatif */
+    /* Stats */
     .stat-comparison-row {
       display: grid;
       grid-template-columns: 1fr 2fr 1fr;
@@ -305,28 +334,47 @@
     .stat-val-b { font-weight: 900; color: var(--team-b); }
     .stat-lbl { color: var(--text-muted); font-size: 0.74rem; font-weight: 700; }
 
-    /* Joueurs */
+    /* Roster Styles & Badges */
     .player-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 8px 6px;
+      padding: 9px 6px;
       border-bottom: 1px solid var(--card-border);
-      font-size: 0.82rem;
+      font-size: 0.84rem;
+    }
+
+    .player-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .player-badge {
-      width: 22px;
-      height: 22px;
+      width: 24px;
+      height: 24px;
       background: var(--btn-secondary);
       color: var(--btn-secondary-text);
       border-radius: 50%;
       display: inline-grid;
       place-content: center;
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       font-weight: 900;
-      margin-right: 6px;
     }
+
+    .pos-pill {
+      font-size: 0.68rem;
+      font-weight: 900;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .pos-GK { background: #fef08a; color: #854d0e; }
+    .pos-DEF { background: #bfdbfe; color: #1e40af; }
+    .pos-MIL { background: #bbf7d0; color: #166534; }
+    .pos-ATT { background: #fecdd3; color: #9f1239; }
 
     .btn-sub {
       background: var(--btn-secondary);
@@ -342,7 +390,100 @@
     .btn-sub.sub-in { background: var(--team-a); color: var(--team-a-text); border: none; }
     .btn-sub.sub-out { background: var(--team-b); color: var(--team-b-text); border: none; }
 
-    /* Palettes de couleurs */
+    /* Modals */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-box {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-xl);
+      max-width: 460px;
+      width: 100%;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .form-group { margin-bottom: 12px; }
+    .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px;
+      border: 1.5px solid var(--card-border);
+      border-radius: var(--radius-md);
+      background: var(--input-bg);
+      color: var(--text);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .pos-selector-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .pos-btn {
+      background: var(--input-bg);
+      border: 1.5px solid var(--card-border);
+      padding: 8px 4px;
+      border-radius: var(--radius-md);
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .pos-btn.active {
+      border-color: var(--team-a);
+      background: var(--team-a);
+      color: var(--team-a-text);
+    }
+
+    /* OCR Scan Row */
+    .scan-card-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .btn-action-banner {
+      background: var(--card);
+      border: 1.5px solid var(--card-border);
+      color: var(--text);
+      padding: 10px;
+      border-radius: var(--radius-md);
+      font-size: 0.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* Thème presets */
     .theme-preset-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -363,13 +504,7 @@
     }
 
     .preset-dot-pair { display: flex; gap: 3px; }
-
-    .preset-dot {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      border: 1px solid rgba(0,0,0,0.15);
-    }
+    .preset-dot { width: 16px; height: 16px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.15); }
 
     .color-picker-row {
       display: flex;
@@ -394,7 +529,7 @@
     .color-picker-input::-webkit-color-swatch-wrapper { padding: 0; }
     .color-picker-input::-webkit-color-swatch { border: 2px solid var(--card-border); border-radius: 50%; }
 
-    /* Affiche exportable */
+    /* Canvas Export */
     #exportCanvas {
       width: 100%;
       height: auto;
@@ -421,12 +556,10 @@
       gap: 6px;
     }
 
-    /* Barre de navigation basse */
+    /* Bottom Nav */
     .nav-bar {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      bottom: 0; left: 0; right: 0;
       background: var(--nav-bg);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
@@ -462,7 +595,19 @@
 
 <div class="container">
 
-  <!-- TABLEAU D'AFFICHAGE DU MATCH -->
+  <!-- TOP BAR BRAND AVEC LOGO « R » -->
+  <header class="app-topbar">
+    <div class="brand-left">
+      <!-- Écusson Logo R Vectoriel -->
+      <svg class="logo-r-badge" viewBox="0 0 100 100" width="34" height="34" id="header-logo-svg">
+        <path d="M 50 4 L 88 22 L 88 64 L 50 96 L 12 64 L 12 22 Z" fill="#0f172a" stroke="var(--team-a)" stroke-width="7"/>
+        <path d="M 34 26 L 56 26 C 68 26 74 32 74 42 C 74 50 68 56 58 57 L 73 74 L 59 74 L 46 58 L 46 74 L 34 74 Z M 46 37 L 46 48 L 55 48 C 60 48 62 46 62 42.5 C 62 39 60 37 55 37 Z" fill="var(--team-a)" fill-rule="evenodd"/>
+      </svg>
+      <span class="brand-text">MatchDay <span style="color:var(--team-a);">Tracker</span></span>
+    </div>
+  </header>
+
+  <!-- SCOREBOARD TOP -->
   <div class="scoreboard">
     <div class="match-meta">
       <span id="match-period-label">1ère Mi-temps</span>
@@ -504,10 +649,10 @@
     </div>
   </div>
 
-  <!-- ================= ONGLET 1 : TERRAIN & ACTIONS DIRECTES ================= -->
+  <!-- ================= ONGLET 1 : TERRAIN & ACTIONS ================= -->
   <section id="tab-pitch" class="view-tab active">
 
-    <!-- BARRE DE SÉLECTION D'ÉQUIPE (NOUS / ADVERSAIRE) -->
+    <!-- SELECTEUR D'ÉQUIPE -->
     <div class="team-switch-bar">
       <button class="team-switch-btn active team-a" id="switch-team-a" onclick="selectTeam('a')">
         <span id="label-switch-a">🏠 Notre Équipe</span>
@@ -517,7 +662,7 @@
       </button>
     </div>
     
-    <!-- SÉLECTEUR D'ACTION -->
+    <!-- ACTIONS -->
     <div class="event-selector">
       <button class="action-btn active" id="act-goal" onclick="selectAction('goal')">
         <span>⚽</span> But
@@ -539,7 +684,7 @@
       </button>
     </div>
 
-    <!-- TERRAIN DE FOOTBALL EN CANVAS -->
+    <!-- TERRAIN EN CANVAS -->
     <div class="pitch-container">
       <canvas id="pitchCanvas" width="600" height="380"></canvas>
     </div>
@@ -592,21 +737,49 @@
 
   </section>
 
-  <!-- ================= ONGLET 2 : EFFECTIF & TEMPS DE JEU ================= -->
+  <!-- ================= ONGLET 2 : EFFECTIF & SCANNER DE COMPO ================= -->
   <section id="tab-roster" class="view-tab">
 
+    <div class="scan-card-row">
+      <input type="file" id="scan-photo-input" accept="image/*" capture="environment" style="display:none;" onchange="handlePhotoUpload(event)">
+      
+      <button class="btn-action-banner" onclick="document.getElementById('scan-photo-input').click()">
+        <span>📸</span> Scanner compo (Photo/Screen)
+      </button>
+      <button class="btn-action-banner" onclick="openTextPasteModal()">
+        <span>📋</span> Coller texte compo
+      </button>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <button class="btn-primary" style="padding:10px 14px; font-size:0.85rem;" onclick="openPlayerModal()">
+        ➕ Ajouter un joueur manuellement
+      </button>
+      <button class="btn-timer" style="padding:10px; color:var(--team-b);" onclick="clearRosterConfirm()">
+        🗑️ Vider
+      </button>
+    </div>
+
+    <!-- ÉTAT DE SCANNING OCR -->
+    <div id="scan-progress-box" style="display:none; background:var(--card); border:1.5px solid var(--blue); padding:12px; border-radius:var(--radius-md); margin-bottom:12px; text-align:center;">
+      <div style="font-size:0.85rem; font-weight:800; color:var(--blue);" id="scan-status-text">Analyse de la photo en cours...</div>
+      <div style="width:100%; height:6px; background:var(--card-border); border-radius:10px; margin-top:8px; overflow:hidden;">
+        <div id="scan-progress-bar" style="width:10%; height:100%; background:var(--blue); transition:width 0.2s;"></div>
+      </div>
+    </div>
+
+    <!-- TITULAIRES -->
     <div class="card">
       <div class="card-title" style="justify-content:space-between;">
-        <span>🏃 Titulaires sur le terrain</span>
-        <button class="btn-timer" onclick="addPlayerPrompt('titulaire')">+ Joueur</button>
+        <span>🏃 Titulaires sur le terrain (<span id="count-starters">0</span>)</span>
       </div>
       <div id="lineup-starters"></div>
     </div>
 
+    <!-- REMPLAÇANTS -->
     <div class="card">
       <div class="card-title" style="justify-content:space-between;">
-        <span>🪑 Banc des remplaçants</span>
-        <button class="btn-timer" onclick="addPlayerPrompt('sub')">+ Remplaçant</button>
+        <span>🪑 Banc des remplaçants (<span id="count-subs">0</span>)</span>
       </div>
       <div id="lineup-subs"></div>
     </div>
@@ -619,7 +792,7 @@
     <div class="card">
       <div class="card-title">🎨 Affiche d'Après-Match</div>
       <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">
-        Image générée avec score, buteurs, cartons et stats croisées.
+        Image générée avec score, buteurs, cartons, carte des tirs et logo officiel « R ».
       </p>
 
       <canvas id="exportCanvas" width="800" height="1020"></canvas>
@@ -636,10 +809,9 @@
 
   </section>
 
-  <!-- ================= ONGLET 4 : PERSONNALISATION COULEURS & MODE CLAIR/SOMBRE ================= -->
+  <!-- ================= ONGLET 4 : COULEURS & THÈMES ================= -->
   <section id="tab-theme" class="view-tab">
 
-    <!-- SÉLECTEUR MODE CLAIR / SOMBRE -->
     <div class="card">
       <div class="card-title">☀️ Affichage & Luminosité</div>
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
@@ -721,7 +893,6 @@
       </div>
     </div>
 
-    <!-- SÉLECTEURS COULEURS LIBRES -->
     <div class="card">
       <div class="card-title">🎨 Personnalisation Manuelle</div>
 
@@ -783,7 +954,86 @@
 
 </div>
 
-<!-- BARRE DE NAVIGATION INFÉRIEURE -->
+<!-- MODAL CRÉATION JOUEUR MANUEL -->
+<div id="playerModal" class="modal-overlay" onclick="closePlayerModal(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div style="font-size:1.1rem; font-weight:900; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center;">
+      <span>Nouveau Joueur</span>
+      <button style="background:none; border:none; font-size:1.4rem; color:var(--text-muted); cursor:pointer;" onclick="closePlayerModal(event)">&times;</button>
+    </div>
+
+    <div class="form-group">
+      <label>Nom ou Prénom du Joueur</label>
+      <input type="text" id="modal-player-name" class="form-input" placeholder="Ex: Dupont, Thomas...">
+    </div>
+
+    <div class="form-group">
+      <label>Numéro de Maillot</label>
+      <input type="number" id="modal-player-num" class="form-input" value="9" min="1" max="99">
+    </div>
+
+    <div class="form-group">
+      <label>Poste sur le terrain</label>
+      <div class="pos-selector-grid">
+        <button class="pos-btn" id="btn-pos-GK" onclick="selectModalPos('GK')">🧤 Gardien</button>
+        <button class="pos-btn" id="btn-pos-DEF" onclick="selectModalPos('DEF')">🛡️ Défense</button>
+        <button class="pos-btn" id="btn-pos-MIL" onclick="selectModalPos('MIL')">⚙️ Milieu</button>
+        <button class="pos-btn active" id="btn-pos-ATT" onclick="selectModalPos('ATT')">⚡ Attaque</button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Statut au coup d'envoi</label>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+        <button class="pos-btn active" id="btn-statut-starter" onclick="selectModalStatut(true)">Titulaire (Terrain)</button>
+        <button class="pos-btn" id="btn-statut-sub" onclick="selectModalStatut(false)">Remplaçant (Banc)</button>
+      </div>
+    </div>
+
+    <button class="btn-primary" style="margin-top:16px;" onclick="confirmAddPlayer()">
+      Enregistrer le joueur
+    </button>
+  </div>
+</div>
+
+<!-- MODAL VALIDATION SCAN OCR -->
+<div id="scanReviewModal" class="modal-overlay" onclick="closeScanReviewModal(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div style="font-size:1.1rem; font-weight:900; margin-bottom:6px;">📋 Compo Détectée</div>
+    <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:12px;">
+      Vérifiez les noms et numéros reconnus sur la photo avant d'importer :
+    </p>
+
+    <div id="ocr-detected-list" style="max-height:300px; overflow-y:auto; margin-bottom:14px;"></div>
+
+    <div style="display:flex; gap:8px;">
+      <button class="btn-primary" onclick="confirmImportScannedRoster()">
+        ✓ Valider et importer l'effectif
+      </button>
+      <button class="btn-timer" style="padding:10px;" onclick="closeScanReviewModal(event)">
+        Annuler
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL COLLER TEXTE -->
+<div id="textPasteModal" class="modal-overlay" onclick="closeTextPasteModal(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div style="font-size:1.1rem; font-weight:900; margin-bottom:6px;">📋 Coller la Compo</div>
+    <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:10px;">
+      Collez le texte issu de WhatsApp, Notes ou du Live Text iOS :
+    </p>
+
+    <textarea id="raw-compo-textarea" style="width:100%; height:160px; padding:10px; border:1.5px solid var(--card-border); background:var(--input-bg); color:var(--text); border-radius:8px; font-size:0.82rem; font-family:monospace; margin-bottom:12px;" placeholder="Exemple :&#10;1. Lucas (GK)&#10;2. Thomas DEF&#10;4. Martin DEF&#10;8. Paul MIL&#10;9. Arthur ATT&#10;Remplaçants :&#10;12. Hugo"></textarea>
+
+    <button class="btn-primary" onclick="parseTextCompo()">
+      Analyser et importer la compo
+    </button>
+  </div>
+</div>
+
+<!-- BOTTOM BAR NAVIGATION -->
 <nav class="nav-bar">
   <button class="nav-btn active" onclick="switchNav('pitch')">
     <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><line x1="2" y1="12" x2="22" y2="12"></line></svg>
@@ -826,21 +1076,376 @@
       pitch: "#15803d"
     },
     events: [],
-    players: [
-      { id: 1, name: "Gardien", num: 1, isPlaying: true, minPlayed: 0, yellows: 0, red: false },
-      { id: 2, name: "Défenseur D", num: 2, isPlaying: true, minPlayed: 0, yellows: 0, red: false },
-      { id: 3, name: "Défenseur Axe", num: 4, isPlaying: true, minPlayed: 0, yellows: 0, red: false },
-      { id: 4, name: "Défenseur G", num: 3, isPlaying: true, minPlayed: 0, yellows: 0, red: false },
-      { id: 5, name: "Milieu Def", num: 6, isPlaying: true, minPlayed: 0, yellows: 0, red: false },
-      { id: 6, name: "Milieu Relayeur", num: 8, isPlaying: true, minPlayed: 0, yellows: 0, red: false },
-      { id: 7, name: "Meneur 10", num: 10, isPlaying: true, minPlayed: 0, yellows: 0, red: false },
-      { id: 8, name: "Attaquant 9", num: 9, isPlaying: true, minPlayed: 0, yellows: 0, red: false },
-      { id: 9, name: "Remplaçant 1", num: 12, isPlaying: false, minPlayed: 0, yellows: 0, red: false },
-      { id: 10, name: "Remplaçant 2", num: 13, isPlaying: false, minPlayed: 0, yellows: 0, red: false }
-    ]
+    players: []
   };
 
-  /* CONTRASTE TEXTE (NOIR OU BLANC SELON LA CLARTÉ DU MAILLOT) */
+  /* ROSTER DEFAULT TEMPLATE */
+  const defaultRoster = [
+    { id: 1, name: "Gardien", num: 1, pos: "GK", isPlaying: true, minPlayed: 0, yellows: 0, red: false },
+    { id: 2, name: "Défenseur D", num: 2, pos: "DEF", isPlaying: true, minPlayed: 0, yellows: 0, red: false },
+    { id: 3, name: "Défenseur Axe", num: 4, pos: "DEF", isPlaying: true, minPlayed: 0, yellows: 0, red: false },
+    { id: 4, name: "Défenseur G", num: 3, pos: "DEF", isPlaying: true, minPlayed: 0, yellows: 0, red: false },
+    { id: 5, name: "Milieu Def", num: 6, pos: "MIL", isPlaying: true, minPlayed: 0, yellows: 0, red: false },
+    { id: 6, name: "Milieu Centre", num: 8, pos: "MIL", isPlaying: true, minPlayed: 0, yellows: 0, red: false },
+    { id: 7, name: "Meneur", num: 10, pos: "MIL", isPlaying: true, minPlayed: 0, yellows: 0, red: false },
+    { id: 8, name: "Ailier D", num: 7, pos: "ATT", isPlaying: true, minPlayed: 0, yellows: 0, red: false },
+    { id: 9, name: "Buteur", num: 9, pos: "ATT", isPlaying: true, minPlayed: 0, yellows: 0, red: false },
+    { id: 10, name: "Ailier G", num: 11, pos: "ATT", isPlaying: true, minPlayed: 0, yellows: 0, red: false },
+    { id: 11, name: "Remplaçant Def", num: 12, pos: "DEF", isPlaying: false, minPlayed: 0, yellows: 0, red: false },
+    { id: 12, name: "Remplaçant Mil", num: 13, pos: "MIL", isPlaying: false, minPlayed: 0, yellows: 0, red: false },
+    { id: 13, name: "Remplaçant Att", num: 14, pos: "ATT", isPlaying: false, minPlayed: 0, yellows: 0, red: false }
+  ];
+
+  function loadSavedRoster() {
+    try {
+      const saved = JSON.parse(localStorage.getItem('match_custom_roster'));
+      if (saved && Array.isArray(saved) && saved.length > 0) {
+        matchData.players = saved;
+      } else {
+        matchData.players = defaultRoster;
+      }
+    } catch (e) {
+      matchData.players = defaultRoster;
+    }
+  }
+
+  function saveCurrentRoster() {
+    localStorage.setItem('match_custom_roster', JSON.stringify(matchData.players));
+  }
+
+  /* PHOTO / SCREENSHOT OCR ENGINE (TESSERACT.JS) */
+  let scannedPendingPlayers = [];
+
+  async function handlePhotoUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const progressBox = document.getElementById('scan-progress-box');
+    const progressBar = document.getElementById('scan-progress-bar');
+    const statusText = document.getElementById('scan-status-text');
+
+    progressBox.style.display = 'block';
+    statusText.textContent = "Chargement du moteur OCR...";
+    progressBar.style.width = "15%";
+
+    try {
+      if (typeof Tesseract === 'undefined') {
+        alert("Erreur : Tesseract.js n'a pas pu se charger (vérifiez votre connexion internet).");
+        progressBox.style.display = 'none';
+        return;
+      }
+
+      statusText.textContent = "Analyse et lecture du tableau...";
+      
+      const result = await Tesseract.recognize(
+        file,
+        'fra+eng',
+        {
+          logger: m => {
+            if (m.status === 'recognizing text') {
+              const p = Math.round(m.progress * 100);
+              progressBar.style.width = `${Math.max(20, p)}%`;
+              statusText.textContent = `Lecture en cours : ${p}%`;
+            }
+          }
+        }
+      );
+
+      progressBox.style.display = 'none';
+      parseExtractedText(result.data.text);
+    } catch (err) {
+      console.error(err);
+      progressBox.style.display = 'none';
+      alert("Erreur lors de l'analyse de l'image. Essayez de recadrer ou collez le texte directement.");
+    }
+  }
+
+  function parseExtractedText(rawText) {
+    const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 1);
+    scannedPendingPlayers = [];
+    
+    let isSubMode = false;
+    let autoNumCounter = 1;
+
+    lines.forEach((line, index) => {
+      const lower = line.toLowerCase();
+
+      if (lower.includes('rempla') || lower.includes('banc') || lower.includes('sub') || lower.includes('substitut')) {
+        isSubMode = true;
+        return;
+      }
+
+      if (lower.includes('composition') || lower.includes('equipe') || lower.includes('match') || lower.includes('vs')) {
+        return;
+      }
+
+      let num = null;
+      const numMatch = line.match(/(?:^|[\s#№])(\d{1,2})(?:[\s.\-–:]|$)/);
+      if (numMatch) {
+        num = parseInt(numMatch[1]);
+      }
+
+      let pos = 'MIL';
+      if (/gardien|gk|gb|goal|portier/i.test(line) || num === 1) {
+        pos = 'GK';
+      } else if (/def|dc|dd|dg|arriere|lat/i.test(line) || (num && [2, 3, 4, 5].includes(num))) {
+        pos = 'DEF';
+      } else if (/att|bu|av|ailier|buteur|pointe|ac/i.test(line) || (num && [9, 11].includes(num))) {
+        pos = 'ATT';
+      } else if (/mil|mc|md|mg|mdf|mo/i.test(line) || (num && [6, 7, 8, 10].includes(num))) {
+        pos = 'MIL';
+      }
+
+      let cleanName = line
+        .replace(/(?:^|[\s#№])\d{1,2}(?:[\s.\-–:]|$)/g, ' ')
+        .replace(/\b(gk|gb|def|dc|dd|dg|mil|mc|md|mg|att|bu|av)\b/gi, ' ')
+        .replace(/[()[\]{}:\-–]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+      if (cleanName.length < 2) return;
+
+      const playerNum = num || autoNumCounter++;
+      const isStarter = !isSubMode && (scannedPendingPlayers.filter(p => p.isPlaying).length < 11);
+
+      scannedPendingPlayers.push({
+        id: Date.now() + index,
+        name: cleanName,
+        num: playerNum,
+        pos: pos,
+        isPlaying: isStarter,
+        minPlayed: 0,
+        yellows: 0,
+        red: false
+      });
+    });
+
+    if (!scannedPendingPlayers.length) {
+      alert("Aucun joueur n'a pu être reconnu nettement. Prenez une photo plus nette et bien éclairée, ou collez le texte manuellement.");
+      return;
+    }
+
+    renderScanReviewModal();
+  }
+
+  function renderScanReviewModal() {
+    const container = document.getElementById('ocr-detected-list');
+    container.innerHTML = scannedPendingPlayers.map((p, idx) => `
+      <div style="display:flex; align-items:center; gap:6px; margin-bottom:8px; background:var(--input-bg); padding:6px 8px; border-radius:6px; border:1px solid var(--card-border);">
+        <input type="number" value="${p.num}" style="width:42px; padding:6px; border:1px solid var(--card-border); border-radius:4px; font-weight:800; text-align:center;" onchange="scannedPendingPlayers[${idx}].num = parseInt(this.value)||1">
+        <input type="text" value="${p.name}" style="flex-grow:1; padding:6px; border:1px solid var(--card-border); border-radius:4px; font-weight:700;" onchange="scannedPendingPlayers[${idx}].name = this.value">
+        <select style="padding:6px; border:1px solid var(--card-border); border-radius:4px; font-size:0.75rem; font-weight:800;" onchange="scannedPendingPlayers[${idx}].pos = this.value">
+          <option value="GK" ${p.pos==='GK'?'selected':''}>GK</option>
+          <option value="DEF" ${p.pos==='DEF'?'selected':''}>DEF</option>
+          <option value="MIL" ${p.pos==='MIL'?'selected':''}>MIL</option>
+          <option value="ATT" ${p.pos==='ATT'?'selected':''}>ATT</option>
+        </select>
+        <button style="border:none; padding:6px 8px; border-radius:4px; font-size:0.72rem; font-weight:800; cursor:pointer; background:${p.isPlaying ? 'var(--team-a)' : 'var(--btn-secondary)'}; color:${p.isPlaying ? 'var(--team-a-text)' : 'var(--btn-secondary-text)'};" onclick="scannedPendingPlayers[${idx}].isPlaying = !scannedPendingPlayers[${idx}].isPlaying; renderScanReviewModal();">
+          ${p.isPlaying ? 'Titulaire' : 'Banc'}
+        </button>
+        <button style="background:none; border:none; color:var(--text-muted); cursor:pointer;" onclick="scannedPendingPlayers.splice(${idx},1); renderScanReviewModal();">✕</button>
+      </div>
+    `).join('');
+
+    document.getElementById('scanReviewModal').style.display = 'flex';
+  }
+
+  function confirmImportScannedRoster() {
+    if (!scannedPendingPlayers.length) return;
+    matchData.players = [...scannedPendingPlayers];
+    saveCurrentRoster();
+    renderRoster();
+    closeScanReviewModal();
+    alert(`✓ ${matchData.players.length} joueurs importés avec succès dans l'effectif !`);
+  }
+
+  function closeScanReviewModal(e) {
+    if (e) e.stopPropagation();
+    document.getElementById('scanReviewModal').style.display = 'none';
+  }
+
+  /* MODAL COLLER TEXTE */
+  function openTextPasteModal() {
+    document.getElementById('raw-compo-textarea').value = '';
+    document.getElementById('textPasteModal').style.display = 'flex';
+  }
+
+  function closeTextPasteModal(e) {
+    if (e) e.stopPropagation();
+    document.getElementById('textPasteModal').style.display = 'none';
+  }
+
+  function parseTextCompo() {
+    const text = document.getElementById('raw-compo-textarea').value.trim();
+    if (!text) {
+      alert("Veuillez coller le texte de votre composition.");
+      return;
+    }
+    closeTextPasteModal();
+    parseExtractedText(text);
+  }
+
+  /* MODAL CRÉATION JOUEUR MANUEL */
+  let modalSelectedPos = 'ATT';
+  let modalSelectedStarter = true;
+
+  function openPlayerModal() {
+    document.getElementById('modal-player-name').value = '';
+    document.getElementById('modal-player-num').value = matchData.players.length + 1;
+    selectModalPos('ATT');
+    selectModalStatut(true);
+    document.getElementById('playerModal').style.display = 'flex';
+  }
+
+  function closePlayerModal(e) {
+    if (e) e.stopPropagation();
+    document.getElementById('playerModal').style.display = 'none';
+  }
+
+  function selectModalPos(pos) {
+    modalSelectedPos = pos;
+    ['GK', 'DEF', 'MIL', 'ATT'].forEach(p => {
+      document.getElementById(`btn-pos-${p}`).classList.toggle('active', p === pos);
+    });
+  }
+
+  function selectModalStatut(isStarter) {
+    modalSelectedStarter = isStarter;
+    document.getElementById('btn-statut-starter').classList.toggle('active', isStarter);
+    document.getElementById('btn-statut-sub').classList.toggle('active', !isStarter);
+  }
+
+  function confirmAddPlayer() {
+    const name = document.getElementById('modal-player-name').value.trim();
+    const num = parseInt(document.getElementById('modal-player-num').value) || 1;
+
+    if (!name) {
+      alert("Veuillez renseigner un nom ou prénom pour le joueur.");
+      return;
+    }
+
+    matchData.players.push({
+      id: Date.now(),
+      name: name,
+      num: num,
+      pos: modalSelectedPos,
+      isPlaying: modalSelectedStarter,
+      minPlayed: 0,
+      yellows: 0,
+      red: false
+    });
+
+    saveCurrentRoster();
+    renderRoster();
+    closePlayerModal();
+  }
+
+  function deletePlayer(id) {
+    if (confirm("Supprimer ce joueur de l'effectif ?")) {
+      matchData.players = matchData.players.filter(p => p.id !== id);
+      saveCurrentRoster();
+      renderRoster();
+    }
+  }
+
+  function clearRosterConfirm() {
+    if (confirm("Voulez-vous vider tous les joueurs pour créer votre propre composition ?")) {
+      matchData.players = [];
+      saveCurrentRoster();
+      renderRoster();
+    }
+  }
+
+  /* RENDU EFFECTIF */
+  function renderRoster() {
+    const startersContainer = document.getElementById('lineup-starters');
+    const subsContainer = document.getElementById('lineup-subs');
+
+    const starters = matchData.players.filter(p => p.isPlaying);
+    const subs = matchData.players.filter(p => !p.isPlaying);
+
+    document.getElementById('count-starters').textContent = starters.length;
+    document.getElementById('count-subs').textContent = subs.length;
+
+    const posOrder = { 'GK': 1, 'DEF': 2, 'MIL': 3, 'ATT': 4 };
+    starters.sort((a, b) => (posOrder[a.pos] || 9) - (posOrder[b.pos] || 9));
+    subs.sort((a, b) => (posOrder[a.pos] || 9) - (posOrder[b.pos] || 9));
+
+    startersContainer.innerHTML = starters.length ? starters.map(p => `
+      <div class="player-row">
+        <div class="player-left">
+          <span class="player-badge">${p.num}</span>
+          <span class="pos-pill pos-${p.pos}">${p.pos}</span>
+          <strong>${p.name}</strong>
+          <span style="margin-left:4px;">
+            ${p.yellows ? '🟨'.repeat(p.yellows) : ''}
+            ${p.red ? '🟥' : ''}
+          </span>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span style="font-weight:800; color:var(--team-a); font-size:0.85rem;">${p.minPlayed}'</span>
+          <button class="btn-sub sub-out" onclick="substitutePlayer(${p.id})">Sortir ⬇️</button>
+          <button style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:0.85rem;" onclick="deletePlayer(${p.id})">🗑️</button>
+        </div>
+      </div>
+    `).join('') : `<p style="color:var(--text-muted); text-align:center; padding:12px; font-size:0.8rem;">Aucun titulaire sur le terrain.</p>`;
+
+    subsContainer.innerHTML = subs.length ? subs.map(p => `
+      <div class="player-row">
+        <div class="player-left">
+          <span class="player-badge">${p.num}</span>
+          <span class="pos-pill pos-${p.pos}">${p.pos}</span>
+          <span style="color:var(--text);">${p.name}</span>
+          <span style="margin-left:4px;">
+            ${p.yellows ? '🟨'.repeat(p.yellows) : ''}
+            ${p.red ? '🟥 Expulsé' : ''}
+          </span>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span style="font-weight:700; color:var(--text-muted); font-size:0.8rem;">${p.minPlayed}'</span>
+          ${!p.red ? `<button class="btn-sub sub-in" onclick="substitutePlayer(${p.id})">Entrer ⬆️</button>` : ''}
+          <button style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:0.85rem;" onclick="deletePlayer(${p.id})">🗑️</button>
+        </div>
+      </div>
+    `).join('') : `<p style="color:var(--text-muted); text-align:center; padding:12px; font-size:0.8rem;">Banc vide.</p>`;
+  }
+
+  function substitutePlayer(playerId) {
+    const player = matchData.players.find(p => p.id === playerId);
+    if (!player || player.red) return;
+
+    const currentMin = Math.floor(matchData.matchSeconds / 60);
+
+    if (player.isPlaying) {
+      player.isPlaying = false;
+      matchData.events.unshift({
+        id: Date.now(),
+        min: currentMin,
+        type: 'sub',
+        team: 'a',
+        x: 50,
+        y: 95,
+        player: `Remplacement : ${player.name} sort`
+      });
+    } else {
+      player.isPlaying = true;
+      matchData.events.unshift({
+        id: Date.now(),
+        min: currentMin,
+        type: 'sub',
+        team: 'a',
+        x: 50,
+        y: 95,
+        player: `Remplacement : ${player.name} entre`
+      });
+    }
+
+    saveCurrentRoster();
+    renderRoster();
+    renderEvents();
+  }
+
+  /* CONTRASTE TEXTE AUTO */
   function getContrastColor(hexcolor) {
     hexcolor = hexcolor.replace("#", "");
     if (hexcolor.length === 3) hexcolor = hexcolor.split('').map(c => c + c).join('');
@@ -851,7 +1456,7 @@
     return (yiq >= 135) ? '#0b1120' : '#ffffff';
   }
 
-  /* BASSER MODE CLAIR / SOMBRE */
+  /* MODE CLAIR / SOMBRE */
   function setAppThemeMode(mode) {
     matchData.themeMode = mode;
     document.documentElement.setAttribute('data-theme', mode);
@@ -879,7 +1484,7 @@
     }
   }
 
-  /* GESTION DES COULEURS DU CLUB */
+  /* COULEURS */
   function applyThemeColors() {
     const textA = getContrastColor(matchData.theme.teamA);
     const textB = getContrastColor(matchData.theme.teamB);
@@ -948,7 +1553,7 @@
     }
   }
 
-  /* TEAM SELECTION SWITCH */
+  /* SWITCH ÉQUIPE */
   function selectTeam(team) {
     matchData.selectedTeam = team;
     const btnA = document.getElementById('switch-team-a');
@@ -963,7 +1568,7 @@
     }
   }
 
-  /* SCORE ADJUSTMENT */
+  /* SCORE AJUSTEMENT */
   function adjustScore(team, delta) {
     if (team === 'a') {
       matchData.scoreA = Math.max(0, matchData.scoreA + delta);
@@ -1177,8 +1782,9 @@
 
     if (type === 'goal') {
       if (team === 'a') {
-        const activePlayers = matchData.players.filter(p => p.isPlaying && !p.red).map(p => p.name);
-        actorName = prompt("Buteur (" + matchData.teamA + ") :", activePlayers[0] || "Attaquant") || "Buteur";
+        const activeStarters = matchData.players.filter(p => p.isPlaying && !p.red);
+        const suggestion = activeStarters.length > 0 ? activeStarters[0].name : "Attaquant";
+        actorName = prompt("Buteur (" + matchData.teamA + ") :", suggestion) || "Buteur";
         matchData.scoreA++;
         document.getElementById('score-a').textContent = matchData.scoreA;
       } else {
@@ -1189,8 +1795,8 @@
     } else if (type === 'yellowCard' || type === 'redCard') {
       const cardLabel = type === 'yellowCard' ? "carton jaune 🟨" : "carton rouge 🟥";
       if (team === 'a') {
-        const activePlayers = matchData.players.filter(p => p.isPlaying && !p.red);
-        actorName = prompt(`Joueur sanctionné par un ${cardLabel} (${matchData.teamA}) :`, activePlayers[0] ? activePlayers[0].name : "Joueur") || "Joueur";
+        const activeStarters = matchData.players.filter(p => p.isPlaying && !p.red);
+        actorName = prompt(`Joueur sanctionné par un ${cardLabel} (${matchData.teamA}) :`, activeStarters[0] ? activeStarters[0].name : "Joueur") || "Joueur";
         
         const pl = matchData.players.find(p => p.name.toLowerCase() === actorName.toLowerCase());
         if (pl) {
@@ -1206,6 +1812,7 @@
             pl.isPlaying = false;
             alert(`🟥 Carton rouge direct pour ${pl.name} ! Il doit quitter le terrain.`);
           }
+          saveCurrentRoster();
           renderRoster();
         }
       } else {
@@ -1301,100 +1908,55 @@
     document.getElementById('stat-reds-b').textContent = redsB;
   }
 
-  /* EFFECTIF */
-  function renderRoster() {
-    const startersContainer = document.getElementById('lineup-starters');
-    const subsContainer = document.getElementById('lineup-subs');
+  /* FONCTION D'ÉCRITURE DU LOGO R SUR LE CANVAS DE L'AFFICHE */
+  function drawRLogoOnCanvas(xctx, x, y, size) {
+    xctx.save();
+    xctx.translate(x, y);
+    const scale = size / 100;
+    xctx.scale(scale, scale);
 
-    const starters = matchData.players.filter(p => p.isPlaying);
-    const subs = matchData.players.filter(p => !p.isPlaying);
+    // Écusson
+    xctx.beginPath();
+    xctx.moveTo(50, 4);
+    xctx.lineTo(88, 22);
+    xctx.lineTo(88, 64);
+    xctx.lineTo(50, 96);
+    xctx.lineTo(12, 64);
+    xctx.lineTo(12, 22);
+    xctx.closePath();
+    xctx.fillStyle = "#0f172a";
+    xctx.fill();
+    xctx.strokeStyle = matchData.theme.teamA;
+    xctx.lineWidth = 7;
+    xctx.stroke();
 
-    startersContainer.innerHTML = starters.map(p => `
-      <div class="player-row">
-        <div>
-          <span class="player-badge">${p.num}</span>
-          <strong>${p.name}</strong>
-          <span style="margin-left:6px;">
-            ${p.yellows ? '🟨'.repeat(p.yellows) : ''}
-            ${p.red ? '🟥' : ''}
-          </span>
-        </div>
-        <div style="display:flex; align-items:center; gap:8px;">
-          <span style="font-weight:800; color:var(--team-a);">${p.minPlayed}'</span>
-          <button class="btn-sub sub-out" onclick="substitutePlayer(${p.id})">Sortir ⬇️</button>
-        </div>
-      </div>
-    `).join('');
+    // Lettre « R »
+    xctx.fillStyle = matchData.theme.teamA;
+    xctx.beginPath();
+    // Contour extérieur du R
+    xctx.moveTo(34, 26);
+    xctx.lineTo(56, 26);
+    xctx.bezierCurveTo(68, 26, 74, 32, 74, 42);
+    xctx.bezierCurveTo(74, 50, 68, 56, 58, 57);
+    xctx.lineTo(73, 74);
+    xctx.lineTo(59, 74);
+    xctx.lineTo(46, 58);
+    xctx.lineTo(46, 74);
+    xctx.lineTo(34, 74);
+    xctx.closePath();
+    // Trou intérieur du R
+    xctx.moveTo(46, 37);
+    xctx.lineTo(46, 48);
+    xctx.lineTo(55, 48);
+    xctx.bezierCurveTo(60, 48, 62, 46, 62, 42.5);
+    xctx.bezierCurveTo(62, 39, 60, 37, 55, 37);
+    xctx.closePath();
+    xctx.fill("evenodd");
 
-    subsContainer.innerHTML = subs.map(p => `
-      <div class="player-row">
-        <div>
-          <span class="player-badge">${p.num}</span>
-          <span style="color:var(--text-muted);">${p.name}</span>
-          <span style="margin-left:6px;">
-            ${p.yellows ? '🟨'.repeat(p.yellows) : ''}
-            ${p.red ? '🟥 Expulsé' : ''}
-          </span>
-        </div>
-        <div style="display:flex; align-items:center; gap:8px;">
-          <span style="font-weight:700; color:var(--text-muted);">${p.minPlayed}'</span>
-          ${!p.red ? `<button class="btn-sub sub-in" onclick="substitutePlayer(${p.id})">Entrer ⬆️</button>` : ''}
-        </div>
-      </div>
-    `).join('');
+    xctx.restore();
   }
 
-  function substitutePlayer(playerId) {
-    const player = matchData.players.find(p => p.id === playerId);
-    if (!player || player.red) return;
-
-    const currentMin = Math.floor(matchData.matchSeconds / 60);
-
-    if (player.isPlaying) {
-      player.isPlaying = false;
-      matchData.events.unshift({
-        id: Date.now(),
-        min: currentMin,
-        type: 'sub',
-        team: 'a',
-        x: 50,
-        y: 95,
-        player: `Remplacement : ${player.name} sort`
-      });
-    } else {
-      player.isPlaying = true;
-      matchData.events.unshift({
-        id: Date.now(),
-        min: currentMin,
-        type: 'sub',
-        team: 'a',
-        x: 50,
-        y: 95,
-        player: `Remplacement : ${player.name} entre`
-      });
-    }
-
-    renderRoster();
-    renderEvents();
-  }
-
-  function addPlayerPrompt(type) {
-    const name = prompt("Nom du joueur :");
-    if (!name) return;
-    const num = parseInt(prompt("Numéro de maillot :", "7")) || 7;
-    matchData.players.push({
-      id: Date.now(),
-      name: name,
-      num: num,
-      isPlaying: type === 'titulaire',
-      minPlayed: 0,
-      yellows: 0,
-      red: false
-    });
-    renderRoster();
-  }
-
-  /* GÉNÉRATEUR D'AFFICHE ADAPTÉ CLAIR / SOMBRE */
+  /* POST-MATCH EXPORT CARD AVEC LOGO « R » */
   function renderExportCanvas() {
     const expCanvas = document.getElementById('exportCanvas');
     const xctx = expCanvas.getContext('2d');
@@ -1403,7 +1965,6 @@
 
     const isLight = matchData.themeMode === 'light';
 
-    // Fond affiche
     if (isLight) {
       xctx.fillStyle = "#ffffff";
       xctx.fillRect(0, 0, w, h);
@@ -1420,29 +1981,32 @@
       xctx.fillRect(0, 0, w, h);
     }
 
-    // Titre supérieur
+    // Dessiner le logo R en haut à gauche de l'affiche
+    drawRLogoOnCanvas(xctx, 45, 38, 48);
+
+    // Titre d'en-tête
     xctx.fillStyle = matchData.theme.teamA;
     xctx.font = "bold 20px -apple-system, sans-serif";
     xctx.textAlign = "center";
-    xctx.fillText("MATCHDAY TRACKER • SCORE FINAL", w / 2, 60);
+    xctx.fillText("MATCHDAY TRACKER • SCORE FINAL", w / 2, 68);
 
     // Équipes
     xctx.fillStyle = matchData.theme.teamA;
     xctx.font = "bold 24px sans-serif";
-    xctx.fillText(matchData.teamA.toUpperCase(), w / 4, 120);
+    xctx.fillText(matchData.teamA.toUpperCase(), w / 4, 128);
 
     xctx.fillStyle = matchData.theme.teamB;
-    xctx.fillText(matchData.teamB.toUpperCase(), (w / 4) * 3, 120);
+    xctx.fillText(matchData.teamB.toUpperCase(), (w / 4) * 3, 128);
 
     // Score
     xctx.fillStyle = isLight ? "#0f172a" : "#ffffff";
     xctx.font = "900 84px sans-serif";
-    xctx.fillText(`${matchData.scoreA}  -  ${matchData.scoreB}`, w / 2, 200);
+    xctx.fillText(`${matchData.scoreA}  -  ${matchData.scoreB}`, w / 2, 205);
 
     // Buteurs
     xctx.fillStyle = "#0284c7";
     xctx.font = "bold 18px sans-serif";
-    xctx.fillText("BUTEURS DU MATCH", w / 2, 255);
+    xctx.fillText("BUTEURS DU MATCH", w / 2, 258);
 
     const goals = matchData.events.filter(e => e.type === 'goal');
     xctx.fillStyle = isLight ? "#334155" : "#ffffff";
@@ -1450,15 +2014,14 @@
 
     if (!goals.length) {
       xctx.fillStyle = "#94a3b8";
-      xctx.fillText("Aucun but inscrit", w / 2, 285);
+      xctx.fillText("Aucun but inscrit", w / 2, 288);
     } else {
       goals.slice(0, 3).forEach((g, i) => {
         const teamPrefix = g.team === 'a' ? matchData.teamA : matchData.teamB;
-        xctx.fillText(`⚽ ${g.player} (${g.min}') • [${teamPrefix}]`, w / 2, 285 + i * 24);
+        xctx.fillText(`⚽ ${g.player} (${g.min}') • [${teamPrefix}]`, w / 2, 288 + i * 24);
       });
     }
 
-    // Séparateur stats
     const statsY = 370;
     xctx.strokeStyle = isLight ? "#cbd5e1" : "rgba(255, 255, 255, 0.1)";
     xctx.lineWidth = 1.5;
@@ -1469,16 +2032,12 @@
 
     const shotsA = matchData.events.filter(e => e.team === 'a' && (e.type === 'goal' || e.type === 'onTarget' || e.type === 'offTarget')).length;
     const shotsB = matchData.events.filter(e => e.team === 'b' && (e.type === 'goal' || e.type === 'onTarget' || e.type === 'offTarget')).length;
-
     const targetA = matchData.events.filter(e => e.team === 'a' && (e.type === 'goal' || e.type === 'onTarget')).length;
     const targetB = matchData.events.filter(e => e.team === 'b' && (e.type === 'goal' || e.type === 'onTarget')).length;
-
     const foulsA = matchData.events.filter(e => e.team === 'a' && (e.type === 'foul' || e.type === 'yellowCard' || e.type === 'redCard')).length;
     const foulsB = matchData.events.filter(e => e.team === 'b' && (e.type === 'foul' || e.type === 'yellowCard' || e.type === 'redCard')).length;
-
     const yellowsA = matchData.events.filter(e => e.team === 'a' && e.type === 'yellowCard').length;
     const yellowsB = matchData.events.filter(e => e.team === 'b' && e.type === 'yellowCard').length;
-
     const redsA = matchData.events.filter(e => e.team === 'a' && e.type === 'redCard').length;
     const redsB = matchData.events.filter(e => e.team === 'b' && e.type === 'redCard').length;
 
@@ -1488,7 +2047,6 @@
     drawStatRow(xctx, "Cartons Jaunes 🟨", yellowsA, yellowsB, statsY + 135, w, isLight);
     drawStatRow(xctx, "Cartons Rouges 🟥", redsA, redsB, statsY + 170, w, isLight);
 
-    // Mini Shot Map
     const mapY = 600;
     xctx.fillStyle = matchData.theme.teamA;
     xctx.font = "bold 20px sans-serif";
@@ -1496,7 +2054,6 @@
 
     xctx.drawImage(canvas, (w - 460) / 2, mapY + 20, 460, 280);
 
-    // Pied de page
     xctx.fillStyle = "#94a3b8";
     xctx.font = "14px sans-serif";
     xctx.fillText("Généré avec MatchDay Tracker", w / 2, h - 30);
@@ -1552,8 +2109,9 @@
     document.getElementById('cloud-status').textContent = `✓ Salon actif : ${code}`;
   }
 
-  // Démarrage initial
+  // Initialisation
   loadSavedTheme();
+  loadSavedRoster();
   renderRoster();
   renderEvents();
   renderStats();
