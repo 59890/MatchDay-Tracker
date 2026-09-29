@@ -15,31 +15,35 @@
 
   <style>
     :root[data-theme="light"] {
-      --bg: #f4f5f7;
+      --bg: #f3f5f8;
       --card: #ffffff;
-      --card-border: #d0d7de;
+      --card-border: #e2e6eb;
       --scoreboard-bg: #ffffff;
-      --text: #090a0c;
-      --text-muted: #57606a;
-      --nav-bg: rgba(255, 255, 255, 0.98);
-      --btn-secondary: #eaeef2;
-      --btn-secondary-text: #24292f;
-      --input-bg: #ffffff;
-      --divider: #e1e4e8;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --nav-bg: rgba(255, 255, 255, 0.95);
+      --btn-secondary: #f1f4f8;
+      --btn-secondary-text: #1e293b;
+      --input-bg: #f8fafc;
+      --divider: #edf1f5;
+      --shadow-sm: 0 2px 6px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.06);
     }
 
     :root[data-theme="dark"] {
-      --bg: #090d16;
-      --card: #111827;
-      --card-border: #1f2937;
-      --scoreboard-bg: #111827;
-      --text: #f9fafb;
-      --text-muted: #9ca3af;
-      --nav-bg: rgba(17, 24, 39, 0.98);
-      --btn-secondary: #1f2937;
-      --btn-secondary-text: #f9fafb;
-      --input-bg: #0b0f17;
-      --divider: #1f2937;
+      --bg: #0b0f19;
+      --card: #131a29;
+      --card-border: #1e293b;
+      --scoreboard-bg: #131a29;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --nav-bg: rgba(19, 26, 41, 0.95);
+      --btn-secondary: #1a2336;
+      --btn-secondary-text: #f8fafc;
+      --input-bg: #0c121e;
+      --divider: #1e293b;
+      --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.25);
+      --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.4);
     }
 
     :root {
@@ -47,15 +51,18 @@
       --team-a-text: #ffffff;
       --team-b: #dc2626;
       --team-b-text: #ffffff;
-      --pitch: #1e3a2f;
+      --pitch: #194434;
 
       --blue: #0284c7;
       --amber: #d97706;
-      --yellow-card: #eab308;
+      --yellow-card: #facc15;
       --red-card: #dc2626;
 
-      --radius: 4px;
-      --radius-sm: 2px;
+      --radius-xl: 16px;
+      --radius-lg: 12px;
+      --radius-md: 9px;
+      --radius-sm: 6px;
+      --radius-pill: 99px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -64,21 +71,20 @@
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.35;
-      padding-bottom: 85px;
+      line-height: 1.4;
+      padding-bottom: 90px;
       font-feature-settings: "tnum";
     }
 
-    .container { max-width: 620px; margin: 0 auto; padding: 10px; }
+    .container { max-width: 620px; margin: 0 auto; padding: 12px; }
 
-    /* Top Bar avec Logo DLY Pro Club */
+    /* Top Bar */
     .app-topbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 6px 2px 10px;
-      border-bottom: 1px solid var(--divider);
-      margin-bottom: 10px;
+      padding: 6px 4px 12px;
+      margin-bottom: 8px;
     }
 
     .brand-left {
@@ -89,45 +95,51 @@
 
     .logo-dly-badge {
       display: block;
-      filter: drop-shadow(0 2px 5px rgba(0,0,0,0.25));
+      filter: drop-shadow(0 3px 6px rgba(0,0,0,0.18));
+      transition: transform 0.15s ease;
     }
 
+    .logo-dly-badge:active { transform: scale(0.96); }
+
     .brand-text {
-      font-size: 0.95rem;
+      font-size: 1.05rem;
       font-weight: 800;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
+      letter-spacing: -0.01em;
       color: var(--text);
     }
 
     .brand-sub {
       font-size: 0.65rem;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--team-a);
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       margin-left: 4px;
+      background: rgba(2, 132, 199, 0.12);
+      padding: 2px 6px;
+      border-radius: var(--radius-pill);
     }
 
     /* Scoreboard */
     .scoreboard {
       background: var(--scoreboard-bg);
       border: 1px solid var(--card-border);
-      border-radius: var(--radius);
-      padding: 12px 14px;
-      margin-bottom: 10px;
+      border-radius: var(--radius-xl);
+      padding: 16px 14px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
     }
 
     .match-meta {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       font-weight: 700;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
     }
 
     #match-period-label { text-align: left; }
@@ -135,12 +147,13 @@
     .match-timer-badge {
       background: var(--text);
       color: var(--card);
-      padding: 2px 10px;
-      border-radius: var(--radius-sm);
+      padding: 3px 12px;
+      border-radius: var(--radius-pill);
       font-weight: 800;
       font-size: 0.82rem;
       font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
       justify-self: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
     }
 
     #match-date-label { text-align: right; }
@@ -150,47 +163,51 @@
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
       gap: 12px;
-      padding: 4px 0 6px;
+      padding: 2px 0 8px;
     }
 
     .team-box { text-align: center; }
 
     .team-name {
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       font-weight: 800;
       color: var(--text);
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       cursor: pointer;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
     .team-quick-btns {
       display: flex;
       justify-content: center;
-      gap: 4px;
+      gap: 5px;
     }
 
     .btn-score-mini {
       background: var(--btn-secondary);
       color: var(--btn-secondary-text);
       border: 1px solid var(--card-border);
-      width: 26px;
-      height: 22px;
+      width: 28px;
+      height: 25px;
       border-radius: var(--radius-sm);
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       font-weight: 700;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.1s;
     }
 
+    .btn-score-mini:active { transform: scale(0.95); }
+
     .score-display {
-      font-size: 2.6rem;
+      font-size: 2.7rem;
       font-weight: 900;
       font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      letter-spacing: -0.05em;
+      letter-spacing: -0.04em;
       color: var(--text);
       display: flex;
       justify-content: center;
@@ -203,9 +220,9 @@
     .score-controls {
       display: flex;
       justify-content: center;
-      gap: 6px;
-      margin-top: 10px;
-      padding-top: 8px;
+      gap: 8px;
+      margin-top: 12px;
+      padding-top: 10px;
       border-top: 1px solid var(--divider);
     }
 
@@ -213,26 +230,27 @@
       background: var(--btn-secondary);
       color: var(--btn-secondary-text);
       border: 1px solid var(--card-border);
-      padding: 6px 12px;
-      border-radius: var(--radius-sm);
-      font-size: 0.72rem;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 0.74rem;
       font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.02em;
       cursor: pointer;
+      transition: all 0.15s;
     }
 
+    .btn-timer:active { transform: scale(0.96); }
     .btn-timer.active { background: var(--team-a); color: var(--team-a-text); border-color: var(--team-a); }
 
     /* Switcher Domicile / Adversaire */
     .team-switch-bar {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 4px;
-      margin-bottom: 8px;
+      gap: 5px;
+      margin-bottom: 10px;
       background: var(--btn-secondary);
-      padding: 3px;
-      border-radius: var(--radius);
+      padding: 4px;
+      border-radius: var(--radius-lg);
       border: 1px solid var(--card-border);
     }
 
@@ -240,58 +258,70 @@
       background: transparent;
       border: none;
       color: var(--text-muted);
-      padding: 7px 6px;
-      border-radius: var(--radius-sm);
-      font-size: 0.75rem;
+      padding: 8px 6px;
+      border-radius: var(--radius-md);
+      font-size: 0.78rem;
       font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
+      transition: all 0.15s ease;
     }
 
-    .team-switch-btn.active.team-a { background: var(--team-a); color: var(--team-a-text); }
-    .team-switch-btn.active.team-b { background: var(--team-b); color: var(--team-b-text); }
+    .team-switch-btn.active.team-a {
+      background: var(--team-a);
+      color: var(--team-a-text);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    }
+
+    .team-switch-btn.active.team-b {
+      background: var(--team-b);
+      color: var(--team-b-text);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    }
 
     /* Actions Grid */
     .event-selector {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 5px;
-      margin-bottom: 8px;
+      gap: 6px;
+      margin-bottom: 10px;
     }
 
     .action-btn {
       background: var(--card);
       border: 1px solid var(--card-border);
       color: var(--text);
-      border-radius: var(--radius);
+      border-radius: var(--radius-md);
       padding: 9px 4px;
-      font-size: 0.72rem;
+      font-size: 0.75rem;
       font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.01em;
       cursor: pointer;
       text-align: center;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.1s ease;
     }
+
+    .action-btn:active { transform: scale(0.97); }
 
     .indicator-dot {
       width: 7px;
       height: 7px;
-      border-radius: 1px;
+      border-radius: var(--radius-pill);
       display: inline-block;
     }
 
     .action-btn.active {
-      border-color: var(--text);
+      border-color: var(--team-a);
       background: var(--btn-secondary);
+      box-shadow: 0 0 0 1px var(--team-a);
     }
 
     /* Pitch */
@@ -300,10 +330,11 @@
       width: 100%;
       background: var(--pitch);
       border: 1px solid var(--card-border);
-      border-radius: var(--radius);
+      border-radius: var(--radius-lg);
       overflow: hidden;
       touch-action: none;
       margin-bottom: 8px;
+      box-shadow: inset 0 0 25px rgba(0,0,0,0.25);
     }
 
     #pitchCanvas {
@@ -316,39 +347,37 @@
     .pitch-legend {
       display: flex;
       justify-content: space-around;
-      font-size: 0.68rem;
+      font-size: 0.7rem;
       font-weight: 700;
       color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       background: var(--card);
       border: 1px solid var(--card-border);
-      padding: 6px;
-      border-radius: var(--radius);
+      padding: 7px;
+      border-radius: var(--radius-pill);
+      box-shadow: var(--shadow-sm);
     }
 
     /* Cards */
     .card {
       background: var(--card);
       border: 1px solid var(--card-border);
-      border-radius: var(--radius);
-      padding: 12px;
-      margin-bottom: 10px;
+      border-radius: var(--radius-lg);
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
     }
 
     .card-title {
-      font-size: 0.78rem;
+      font-size: 0.84rem;
       font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
       margin-bottom: 10px;
       display: flex;
       align-items: center;
       gap: 6px;
       color: var(--text);
       border-bottom: 1px solid var(--divider);
-      padding-bottom: 6px;
+      padding-bottom: 8px;
     }
 
     /* Stats Table */
@@ -356,25 +385,25 @@
       display: grid;
       grid-template-columns: 1fr 2fr 1fr;
       align-items: center;
-      padding: 6px 0;
+      padding: 7px 0;
       border-bottom: 1px solid var(--divider);
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       text-align: center;
       font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     }
 
     .stat-val-a { font-weight: 800; color: var(--team-a); }
     .stat-val-b { font-weight: 800; color: var(--team-b); }
-    .stat-lbl { color: var(--text-muted); font-size: 0.7rem; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, sans-serif; text-transform: uppercase; letter-spacing: 0.04em; }
+    .stat-lbl { color: var(--text-muted); font-size: 0.74rem; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, sans-serif; letter-spacing: 0.01em; }
 
     /* Roster */
     .player-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 8px 4px;
+      padding: 8px 6px;
       border-bottom: 1px solid var(--divider);
-      font-size: 0.82rem;
+      font-size: 0.84rem;
     }
 
     .player-left {
@@ -384,8 +413,8 @@
     }
 
     .player-badge {
-      width: 22px;
-      height: 22px;
+      width: 24px;
+      height: 24px;
       background: var(--btn-secondary);
       color: var(--btn-secondary-text);
       border-radius: var(--radius-sm);
@@ -397,29 +426,26 @@
     }
 
     .pos-pill {
-      font-size: 0.65rem;
+      font-size: 0.68rem;
       font-weight: 800;
-      padding: 1px 4px;
-      border-radius: var(--radius-sm);
-      letter-spacing: 0.04em;
-      border: 1px solid transparent;
+      padding: 2px 6px;
+      border-radius: var(--radius-pill);
+      letter-spacing: 0.02em;
     }
 
-    .pos-GK { background: #fef3c7; color: #92400e; border-color: #fde68a; }
-    .pos-DEF { background: #e0e7ff; color: #3730a3; border-color: #c7d2fe; }
-    .pos-MIL { background: #dcfce7; color: #166534; border-color: #bbf7d0; }
-    .pos-ATT { background: #fee2e2; color: #991b1b; border-color: #fecaca; }
+    .pos-GK { background: #fef3c7; color: #92400e; }
+    .pos-DEF { background: #e0e7ff; color: #3730a3; }
+    .pos-MIL { background: #dcfce7; color: #166534; }
+    .pos-ATT { background: #fee2e2; color: #991b1b; }
 
     .btn-sub {
       background: var(--btn-secondary);
       color: var(--btn-secondary-text);
       border: 1px solid var(--card-border);
-      padding: 3px 8px;
-      border-radius: var(--radius-sm);
-      font-size: 0.7rem;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 0.72rem;
       font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
       cursor: pointer;
     }
 
@@ -430,8 +456,8 @@
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(2px);
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(4px);
       z-index: 200;
       display: none;
       align-items: center;
@@ -442,10 +468,11 @@
     .modal-box {
       background: var(--card);
       border: 1px solid var(--card-border);
-      border-radius: var(--radius);
+      border-radius: var(--radius-xl);
       max-width: 440px;
       width: 100%;
-      padding: 16px;
+      padding: 18px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.18);
       max-height: 90vh;
       overflow-y: auto;
     }
@@ -453,37 +480,37 @@
     .form-group { margin-bottom: 12px; }
     .form-group label {
       display: block;
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       font-weight: 800;
       color: var(--text-muted);
       margin-bottom: 4px;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.03em;
     }
 
     .form-input {
       width: 100%;
-      padding: 8px 10px;
+      padding: 9px 12px;
       border: 1px solid var(--card-border);
-      border-radius: var(--radius-sm);
+      border-radius: var(--radius-md);
       background: var(--input-bg);
       color: var(--text);
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       font-weight: 600;
     }
 
     .pos-selector-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 4px;
+      gap: 5px;
     }
 
     .pos-btn {
       background: var(--input-bg);
       border: 1px solid var(--card-border);
       padding: 8px 4px;
-      border-radius: var(--radius-sm);
-      font-size: 0.72rem;
+      border-radius: var(--radius-md);
+      font-size: 0.74rem;
       font-weight: 800;
       color: var(--text-muted);
       cursor: pointer;
@@ -500,7 +527,7 @@
     .scan-card-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 6px;
+      gap: 8px;
       margin-bottom: 10px;
     }
 
@@ -508,76 +535,76 @@
       background: var(--card);
       border: 1px solid var(--card-border);
       color: var(--text);
-      padding: 9px;
-      border-radius: var(--radius);
-      font-size: 0.75rem;
+      padding: 10px;
+      border-radius: var(--radius-md);
+      font-size: 0.78rem;
       font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
+      box-shadow: var(--shadow-sm);
     }
 
     /* Preset Grid */
     .theme-preset-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 6px;
+      gap: 8px;
       margin-bottom: 12px;
     }
 
     .preset-card {
       background: var(--card);
       border: 1px solid var(--card-border);
-      border-radius: var(--radius);
-      padding: 8px;
+      border-radius: var(--radius-md);
+      padding: 10px;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 8px;
       color: var(--text);
-      font-size: 0.76rem;
+      font-size: 0.78rem;
       font-weight: 700;
     }
 
-    .preset-dot-pair { display: flex; gap: 3px; }
-    .preset-dot { width: 12px; height: 12px; border-radius: 2px; border: 1px solid rgba(0,0,0,0.15); }
+    .preset-dot-pair { display: flex; gap: 4px; }
+    .preset-dot { width: 14px; height: 14px; border-radius: var(--radius-pill); border: 1px solid rgba(0,0,0,0.12); }
 
     .color-picker-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 8px 2px;
+      padding: 9px 2px;
       border-bottom: 1px solid var(--divider);
-      font-size: 0.8rem;
+      font-size: 0.84rem;
     }
 
     .color-picker-input {
       appearance: none;
       -webkit-appearance: none;
       border: none;
-      width: 28px;
-      height: 28px;
-      border-radius: var(--radius-sm);
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-pill);
       cursor: pointer;
       background: none;
     }
 
     .color-picker-input::-webkit-color-swatch-wrapper { padding: 0; }
-    .color-picker-input::-webkit-color-swatch { border: 1px solid var(--card-border); border-radius: var(--radius-sm); }
+    .color-picker-input::-webkit-color-swatch { border: 2px solid var(--card-border); border-radius: var(--radius-pill); }
 
     /* Canvas Export */
     #exportCanvas {
       width: 100%;
       height: auto;
-      border-radius: var(--radius);
-      background: #090d16;
+      border-radius: var(--radius-lg);
+      background: #f8fafc;
       border: 1px solid var(--card-border);
       display: block;
       margin-bottom: 10px;
+      box-shadow: var(--shadow-md);
     }
 
     .btn-primary {
@@ -585,31 +612,34 @@
       color: var(--team-a-text);
       border: none;
       width: 100%;
-      padding: 10px;
-      border-radius: var(--radius);
-      font-size: 0.82rem;
+      padding: 11px;
+      border-radius: var(--radius-pill);
+      font-size: 0.84rem;
       font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: all 0.15s;
     }
+
+    .btn-primary:active { transform: scale(0.98); }
 
     /* Bottom Nav */
     .nav-bar {
       position: fixed;
       bottom: 0; left: 0; right: 0;
       background: var(--nav-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border-top: 1px solid var(--card-border);
       display: flex;
       justify-content: space-around;
-      padding: 6px 4px;
+      padding: 8px 4px;
       z-index: 100;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.03);
     }
 
     .nav-btn {
@@ -620,15 +650,14 @@
       flex-direction: column;
       align-items: center;
       gap: 3px;
-      font-size: 0.68rem;
+      font-size: 0.7rem;
       font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
       cursor: pointer;
       width: 20%;
+      transition: color 0.1s;
     }
 
-    .nav-btn svg { width: 19px; height: 19px; stroke: currentColor; fill: none; stroke-width: 2; }
+    .nav-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
     .nav-btn.active { color: var(--team-a); }
 
     .view-tab { display: none; }
@@ -639,27 +668,23 @@
 
 <div class="container">
 
-  <!-- TOP BAR BRAND AVEC LOGO DLY PRO CLUB -->
+  <!-- TOP BAR BRAND -->
   <header class="app-topbar">
     <div class="brand-left">
-      <svg class="logo-dly-badge" viewBox="0 0 100 100" width="38" height="38" id="header-logo-svg">
+      <svg class="logo-dly-badge" viewBox="0 0 100 100" width="40" height="40" id="header-logo-svg">
         <defs>
           <linearGradient id="crestGrad" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stop-color="#1e293b"/>
             <stop offset="100%" stop-color="#0b1120"/>
           </linearGradient>
         </defs>
-        <!-- Écusson affûté et biseauté -->
-        <polygon points="50,4 92,18 84,72 50,96 16,72 8,18" fill="url(#crestGrad)" stroke="var(--team-a)" stroke-width="5"/>
-        <polygon points="50,11 85,23 78,68 50,88 22,68 15,23" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
-        <!-- Étoile club supérieure -->
+        <path d="M 50 6 C 75 6 90 14 90 24 C 90 60 76 80 50 94 C 24 80 10 60 10 24 C 10 14 25 6 50 6 Z" fill="url(#crestGrad)" stroke="var(--team-a)" stroke-width="4.5"/>
         <polygon points="50,16 52.5,21.5 58,21.5 53.5,25 55.5,30.5 50,27 44.5,30.5 46.5,25 42,21.5 47.5,21.5" fill="var(--team-a)"/>
-        <!-- Monogramme DLY athlétique -->
-        <text x="50" y="62" fill="#ffffff" font-size="25" font-weight="900" text-anchor="middle" font-family="'Impact', -apple-system, sans-serif" letter-spacing="1">DLY</text>
-        <line x1="30" y1="70" x2="70" y2="70" stroke="var(--team-a)" stroke-width="3" stroke-linecap="round"/>
+        <text x="50" y="60" fill="#ffffff" font-size="24" font-weight="900" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" letter-spacing="1">DLY</text>
+        <line x1="34" y1="68" x2="66" y2="68" stroke="var(--team-a)" stroke-width="3" stroke-linecap="round"/>
       </svg>
       <div>
-        <span class="brand-text">MatchDay</span><span class="brand-sub">DLY</span>
+        <span class="brand-text">MatchDay</span><span class="brand-sub">Tracker</span>
       </div>
     </div>
   </header>
@@ -683,7 +708,7 @@
 
       <div class="score-display">
         <span id="score-a" style="color:var(--team-a);">0</span>
-        <span style="opacity: 0.3;">:</span>
+        <span style="opacity: 0.25;">:</span>
         <span id="score-b" style="color:var(--team-b);">0</span>
       </div>
 
@@ -729,10 +754,10 @@
         <span class="indicator-dot" style="background:var(--amber);"></span> Faute
       </button>
       <button class="action-btn" id="act-yellowCard" onclick="selectAction('yellowCard')">
-        <span class="indicator-dot" style="background:var(--yellow-card); width:6px; height:9px;"></span> Jaune
+        <span class="indicator-dot" style="background:var(--yellow-card); width:6px; height:9px; border-radius:2px;"></span> Jaune
       </button>
       <button class="action-btn" id="act-redCard" onclick="selectAction('redCard')">
-        <span class="indicator-dot" style="background:var(--red-card); width:6px; height:9px;"></span> Rouge
+        <span class="indicator-dot" style="background:var(--red-card); width:6px; height:9px; border-radius:2px;"></span> Rouge
       </button>
     </div>
 
@@ -779,7 +804,7 @@
 
     <div class="card">
       <div class="card-title">Chronologie des événements</div>
-      <div id="events-timeline" style="max-height:160px; overflow-y:auto; font-size:0.78rem;">
+      <div id="events-timeline" style="max-height:160px; overflow-y:auto; font-size:0.8rem;">
         <p style="color:var(--text-muted); text-align:center; padding:10px;">Touchez le terrain pour consigner les actions.</p>
       </div>
     </div>
@@ -800,18 +825,18 @@
       </button>
     </div>
 
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-      <button class="btn-primary" style="padding:8px 12px; font-size:0.75rem;" onclick="openPlayerModal()">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <button class="btn-primary" style="padding:9px 14px; font-size:0.8rem; width:auto;" onclick="openPlayerModal()">
         + Ajouter un joueur
       </button>
-      <button class="btn-timer" style="padding:8px 10px; color:var(--team-b);" onclick="clearRosterConfirm()">
+      <button class="btn-timer" style="padding:8px 12px; color:var(--team-b);" onclick="clearRosterConfirm()">
         Réinitialiser
       </button>
     </div>
 
-    <div id="scan-progress-box" style="display:none; background:var(--card); border:1px solid var(--blue); padding:10px; border-radius:var(--radius); margin-bottom:10px; text-align:center;">
-      <div style="font-size:0.78rem; font-weight:800; color:var(--blue); text-transform:uppercase;" id="scan-status-text">Analyse optique...</div>
-      <div style="width:100%; height:4px; background:var(--card-border); border-radius:2px; margin-top:6px; overflow:hidden;">
+    <div id="scan-progress-box" style="display:none; background:var(--card); border:1px solid var(--blue); padding:12px; border-radius:var(--radius-lg); margin-bottom:12px; text-align:center;">
+      <div style="font-size:0.8rem; font-weight:800; color:var(--blue);" id="scan-status-text">Analyse optique...</div>
+      <div style="width:100%; height:5px; background:var(--card-border); border-radius:var(--radius-pill); margin-top:8px; overflow:hidden;">
         <div id="scan-progress-bar" style="width:10%; height:100%; background:var(--blue); transition:width 0.2s;"></div>
       </div>
     </div>
@@ -832,23 +857,23 @@
 
   </section>
 
-  <!-- ================= ONGLET 3 : AFFICHE DE SYNTHÈSE (FORMAT RÉSEAUX SOCIAUX) ================= -->
+  <!-- ================= ONGLET 3 : AFFICHE SOCIAL MEDIA ================= -->
   <section id="tab-export" class="view-tab">
 
     <div class="card">
-      <div class="card-title">Visuel officiel de rencontre (Instagram / WhatsApp)</div>
-      <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;">
-        Format vertical 4:5 haute définition avec jauges de confrontation et carte des tirs.
+      <div class="card-title">Visuel d'après-match officiel</div>
+      <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:12px;">
+        Format vertical 4:5 haute définition clair et prêt pour vos partages Instagram ou WhatsApp.
       </p>
 
       <canvas id="exportCanvas" width="1080" height="1350"></canvas>
 
-      <div style="display:flex; gap:6px; margin-top:8px;">
+      <div style="display:flex; gap:8px; margin-top:10px;">
         <button class="btn-primary" onclick="downloadExportImage()">
           Télécharger l'image (PNG)
         </button>
         <button class="btn-primary" style="background:#0f172a; color:#fff;" onclick="shareExportImage()">
-          Partager sur les réseaux
+          Partager
         </button>
       </div>
     </div>
@@ -860,7 +885,7 @@
 
     <div class="card">
       <div class="card-title">Affichage</div>
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
         <button class="btn-timer" id="btn-mode-light" style="padding:9px;" onclick="setAppThemeMode('light')">
           Mode Clair
         </button>
@@ -873,7 +898,7 @@
     <div class="card">
       <div class="card-title">Palettes rapides</div>
       <div class="theme-preset-grid">
-        <div class="preset-card" onclick="applyPreset('#0284c7', '#dc2626', '#1e3a2f')">
+        <div class="preset-card" onclick="applyPreset('#0284c7', '#dc2626', '#194434')">
           <div class="preset-dot-pair">
             <span class="preset-dot" style="background:#0284c7;"></span>
             <span class="preset-dot" style="background:#dc2626;"></span>
@@ -881,7 +906,7 @@
           <span>Bleu & Rouge</span>
         </div>
 
-        <div class="preset-card" onclick="applyPreset('#10b981', '#dc2626', '#1e3a2f')">
+        <div class="preset-card" onclick="applyPreset('#10b981', '#dc2626', '#194434')">
           <div class="preset-dot-pair">
             <span class="preset-dot" style="background:#10b981;"></span>
             <span class="preset-dot" style="background:#dc2626;"></span>
@@ -889,34 +914,34 @@
           <span>Vert & Rouge</span>
         </div>
 
-        <div class="preset-card" onclick="applyPreset('#dc2626', '#111827', '#1e3a2f')">
+        <div class="preset-card" onclick="applyPreset('#dc2626', '#0f172a', '#194434')">
           <div class="preset-dot-pair">
             <span class="preset-dot" style="background:#dc2626;"></span>
-            <span class="preset-dot" style="background:#111827;"></span>
+            <span class="preset-dot" style="background:#0f172a;"></span>
           </div>
           <span>Rouge & Noir</span>
         </div>
 
-        <div class="preset-card" onclick="applyPreset('#d97706', '#111827', '#1b3320')">
+        <div class="preset-card" onclick="applyPreset('#d97706', '#0f172a', '#194434')">
           <div class="preset-dot-pair">
             <span class="preset-dot" style="background:#d97706;"></span>
-            <span class="preset-dot" style="background:#111827;"></span>
+            <span class="preset-dot" style="background:#0f172a;"></span>
           </div>
           <span>Jaune & Noir</span>
         </div>
 
-        <div class="preset-card" onclick="applyPreset('#111827', '#ffffff', '#1e3a2f')">
+        <div class="preset-card" onclick="applyPreset('#0f172a', '#ffffff', '#194434')">
           <div class="preset-dot-pair">
-            <span class="preset-dot" style="background:#111827;"></span>
+            <span class="preset-dot" style="background:#0f172a;"></span>
             <span class="preset-dot" style="background:#ffffff;"></span>
           </div>
           <span>Noir & Blanc</span>
         </div>
 
-        <div class="preset-card" onclick="applyPreset('#0284c7', '#eab308', '#1b3320')">
+        <div class="preset-card" onclick="applyPreset('#0284c7', '#facc15', '#194434')">
           <div class="preset-dot-pair">
             <span class="preset-dot" style="background:#0284c7;"></span>
-            <span class="preset-dot" style="background:#eab308;"></span>
+            <span class="preset-dot" style="background:#facc15;"></span>
           </div>
           <span>Bleu & Jaune</span>
         </div>
@@ -944,10 +969,10 @@
         <div>
           <strong>Surface de jeu</strong>
         </div>
-        <input type="color" class="color-picker-input" id="picker-pitch" value="#1e3a2f" onchange="updateCustomColor('pitch', this.value)">
+        <input type="color" class="color-picker-input" id="picker-pitch" value="#194434" onchange="updateCustomColor('pitch', this.value)">
       </div>
 
-      <button class="btn-timer" style="width:100%; margin-top:10px; padding:8px;" onclick="resetDefaultTheme()">
+      <button class="btn-timer" style="width:100%; margin-top:12px; padding:10px;" onclick="resetDefaultTheme()">
         Réinitialiser les couleurs
       </button>
     </div>
@@ -959,20 +984,20 @@
 
     <div class="card">
       <div class="card-title">Synchronisation terrain</div>
-      <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;">
-        Partage de session pour assistants, préparateur et banc.
+      <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:10px;">
+        Partage de session pour le banc, assistants ou préparateur.
       </p>
 
-      <div style="margin-bottom:8px;">
-        <label style="font-size:0.68rem; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Identifiant de session :</label>
-        <input type="text" id="cloud-match-code" value="MATCH-01" style="width:100%; padding:8px; background:var(--input-bg); border:1px solid var(--card-border); color:var(--text); border-radius:var(--radius-sm); font-weight:700; margin-top:4px; font-family:ui-monospace, monospace;">
+      <div style="margin-bottom:10px;">
+        <label style="font-size:0.7rem; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Identifiant de session :</label>
+        <input type="text" id="cloud-match-code" value="MATCH-01" style="width:100%; padding:9px 12px; background:var(--input-bg); border:1px solid var(--card-border); color:var(--text); border-radius:var(--radius-md); font-weight:700; margin-top:4px; font-family:ui-monospace, monospace;">
       </div>
 
       <button class="btn-primary" style="background:var(--btn-secondary); color:var(--btn-secondary-text);" onclick="toggleCloudSync()">
         Connecter la session
       </button>
 
-      <div id="cloud-status" style="margin-top:8px; font-size:0.74rem; color:var(--team-a); display:none; font-weight:700;">
+      <div id="cloud-status" style="margin-top:10px; font-size:0.78rem; color:var(--team-a); display:none; font-weight:700;">
         Session active et synchronisée.
       </div>
     </div>
@@ -984,9 +1009,9 @@
 <!-- MODAL CRÉATION JOUEUR -->
 <div id="playerModal" class="modal-overlay" onclick="closePlayerModal(event)">
   <div class="modal-box" onclick="event.stopPropagation()">
-    <div style="font-size:0.88rem; font-weight:800; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--divider); padding-bottom:6px;">
+    <div style="font-size:0.95rem; font-weight:800; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--divider); padding-bottom:8px;">
       <span>Nouveau joueur</span>
-      <button style="background:none; border:none; font-size:1.1rem; color:var(--text-muted); cursor:pointer;" onclick="closePlayerModal(event)">✕</button>
+      <button style="background:none; border:none; font-size:1.2rem; color:var(--text-muted); cursor:pointer;" onclick="closePlayerModal(event)">✕</button>
     </div>
 
     <div class="form-group">
@@ -1017,8 +1042,8 @@
       </div>
     </div>
 
-    <button class="btn-primary" style="margin-top:12px;" onclick="confirmAddPlayer()">
-      Enregistrer
+    <button class="btn-primary" style="margin-top:14px;" onclick="confirmAddPlayer()">
+      Enregistrer le joueur
     </button>
   </div>
 </div>
@@ -1026,18 +1051,18 @@
 <!-- MODAL VALIDATION SCAN OCR -->
 <div id="scanReviewModal" class="modal-overlay" onclick="closeScanReviewModal(event)">
   <div class="modal-box" onclick="event.stopPropagation()">
-    <div style="font-size:0.88rem; font-weight:800; text-transform:uppercase; margin-bottom:6px;">Composition détectée</div>
-    <p style="font-size:0.74rem; color:var(--text-muted); margin-bottom:10px;">
-      Vérifiez les données extraites avant d'importer :
+    <div style="font-size:0.95rem; font-weight:800; margin-bottom:6px;">Composition détectée</div>
+    <p style="font-size:0.76rem; color:var(--text-muted); margin-bottom:12px;">
+      Vérifiez les données extraites avant validation :
     </p>
 
     <div id="ocr-detected-list" style="max-height:280px; overflow-y:auto; margin-bottom:12px;"></div>
 
-    <div style="display:flex; gap:6px;">
+    <div style="display:flex; gap:8px;">
       <button class="btn-primary" onclick="confirmImportScannedRoster()">
         Valider l'effectif
       </button>
-      <button class="btn-timer" style="padding:8px 10px;" onclick="closeScanReviewModal(event)">
+      <button class="btn-timer" style="padding:10px 14px;" onclick="closeScanReviewModal(event)">
         Annuler
       </button>
     </div>
@@ -1047,12 +1072,12 @@
 <!-- MODAL COLLER TEXTE -->
 <div id="textPasteModal" class="modal-overlay" onclick="closeTextPasteModal(event)">
   <div class="modal-box" onclick="event.stopPropagation()">
-    <div style="font-size:0.88rem; font-weight:800; text-transform:uppercase; margin-bottom:6px;">Import texte de composition</div>
-    <p style="font-size:0.74rem; color:var(--text-muted); margin-bottom:8px;">
-      Collez la liste brute (notes, message, document) :
+    <div style="font-size:0.95rem; font-weight:800; margin-bottom:6px;">Import texte de composition</div>
+    <p style="font-size:0.76rem; color:var(--text-muted); margin-bottom:8px;">
+      Collez votre feuille brute (notes, message WhatsApp, etc.) :
     </p>
 
-    <textarea id="raw-compo-textarea" style="width:100%; height:140px; padding:8px; border:1px solid var(--card-border); background:var(--input-bg); color:var(--text); border-radius:var(--radius-sm); font-size:0.78rem; font-family:ui-monospace, monospace; margin-bottom:10px;" placeholder="1. Thomas GK&#10;2. Lucas DF&#10;4. Martin DF&#10;8. Paul MD&#10;9. Arthur AT&#10;Remplaçants :&#10;12. Hugo"></textarea>
+    <textarea id="raw-compo-textarea" style="width:100%; height:140px; padding:10px; border:1px solid var(--card-border); background:var(--input-bg); color:var(--text); border-radius:var(--radius-md); font-size:0.8rem; font-family:ui-monospace, monospace; margin-bottom:12px;" placeholder="1. Thomas GK&#10;2. Lucas DF&#10;4. Romain DF&#10;8. Paul MD&#10;9. Arthur AT&#10;Remplaçants :&#10;12. Hugo"></textarea>
 
     <button class="btn-primary" onclick="parseTextCompo()">
       Traiter et importer
@@ -1100,7 +1125,7 @@
     theme: {
       teamA: "#0284c7",
       teamB: "#dc2626",
-      pitch: "#1e3a2f"
+      pitch: "#194434"
     },
     events: [],
     players: []
@@ -1258,15 +1283,15 @@
     const container = document.getElementById('ocr-detected-list');
     container.innerHTML = scannedPendingPlayers.map((p, idx) => `
       <div style="display:flex; align-items:center; gap:6px; margin-bottom:6px; background:var(--input-bg); padding:6px 8px; border-radius:var(--radius-sm); border:1px solid var(--card-border);">
-        <input type="number" value="${p.num}" style="width:38px; padding:4px; border:1px solid var(--card-border); border-radius:2px; font-weight:800; text-align:center; font-family:ui-monospace, monospace;" onchange="scannedPendingPlayers[${idx}].num = parseInt(this.value)||1">
-        <input type="text" value="${p.name}" style="flex-grow:1; padding:4px 6px; border:1px solid var(--card-border); border-radius:2px; font-weight:700; font-size:0.8rem;" onchange="scannedPendingPlayers[${idx}].name = this.value">
-        <select style="padding:4px; border:1px solid var(--card-border); border-radius:2px; font-size:0.7rem; font-weight:800;" onchange="scannedPendingPlayers[${idx}].pos = this.value">
+        <input type="number" value="${p.num}" style="width:38px; padding:5px; border:1px solid var(--card-border); border-radius:4px; font-weight:800; text-align:center; font-family:ui-monospace, monospace;" onchange="scannedPendingPlayers[${idx}].num = parseInt(this.value)||1">
+        <input type="text" value="${p.name}" style="flex-grow:1; padding:5px 8px; border:1px solid var(--card-border); border-radius:4px; font-weight:700; font-size:0.8rem;" onchange="scannedPendingPlayers[${idx}].name = this.value">
+        <select style="padding:5px; border:1px solid var(--card-border); border-radius:4px; font-size:0.72rem; font-weight:800;" onchange="scannedPendingPlayers[${idx}].pos = this.value">
           <option value="GK" ${p.pos==='GK'?'selected':''}>GK</option>
           <option value="DEF" ${p.pos==='DEF'?'selected':''}>DF</option>
           <option value="MIL" ${p.pos==='MIL'?'selected':''}>MD</option>
           <option value="ATT" ${p.pos==='ATT'?'selected':''}>AT</option>
         </select>
-        <button style="border:none; padding:4px 6px; border-radius:2px; font-size:0.68rem; font-weight:800; cursor:pointer; background:${p.isPlaying ? 'var(--team-a)' : 'var(--btn-secondary)'}; color:${p.isPlaying ? 'var(--team-a-text)' : 'var(--btn-secondary-text)'};" onclick="scannedPendingPlayers[${idx}].isPlaying = !scannedPendingPlayers[${idx}].isPlaying; renderScanReviewModal();">
+        <button style="border:none; padding:5px 8px; border-radius:var(--radius-pill); font-size:0.68rem; font-weight:800; cursor:pointer; background:${p.isPlaying ? 'var(--team-a)' : 'var(--btn-secondary)'}; color:${p.isPlaying ? 'var(--team-a-text)' : 'var(--btn-secondary-text)'};" onclick="scannedPendingPlayers[${idx}].isPlaying = !scannedPendingPlayers[${idx}].isPlaying; renderScanReviewModal();">
           ${p.isPlaying ? 'TIT' : 'REM'}
         </button>
         <button style="background:none; border:none; color:var(--text-muted); cursor:pointer;" onclick="scannedPendingPlayers.splice(${idx},1); renderScanReviewModal();">✕</button>
@@ -1394,10 +1419,10 @@
           <span class="player-badge">${p.num}</span>
           <span class="pos-pill pos-${p.pos}">${p.pos}</span>
           <strong>${p.name}</strong>
-          ${p.yellows ? `<span style="display:inline-block; width:5px; height:8px; background:var(--yellow-card); border-radius:1px; margin-left:4px;"></span>` : ''}
-          ${p.red ? `<span style="display:inline-block; width:5px; height:8px; background:var(--red-card); border-radius:1px; margin-left:4px;"></span>` : ''}
+          ${p.yellows ? `<span style="display:inline-block; width:6px; height:9px; background:var(--yellow-card); border-radius:2px; margin-left:4px;"></span>` : ''}
+          ${p.red ? `<span style="display:inline-block; width:6px; height:9px; background:var(--red-card); border-radius:2px; margin-left:4px;"></span>` : ''}
         </div>
-        <div style="display:flex; align-items:center; gap:6px;">
+        <div style="display:flex; align-items:center; gap:8px;">
           <span style="font-weight:700; color:var(--text-muted); font-size:0.75rem; font-family:ui-monospace, monospace;">${p.minPlayed}'</span>
           <button class="btn-sub sub-out" onclick="substitutePlayer(${p.id})">Sortir</button>
           <button style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:0.8rem; padding:0 4px;" onclick="deletePlayer(${p.id})">✕</button>
@@ -1411,10 +1436,10 @@
           <span class="player-badge">${p.num}</span>
           <span class="pos-pill pos-${p.pos}">${p.pos}</span>
           <span>${p.name}</span>
-          ${p.yellows ? `<span style="display:inline-block; width:5px; height:8px; background:var(--yellow-card); border-radius:1px; margin-left:4px;"></span>` : ''}
-          ${p.red ? `<span style="display:inline-block; width:5px; height:8px; background:var(--red-card); border-radius:1px; margin-left:4px;"></span>` : ''}
+          ${p.yellows ? `<span style="display:inline-block; width:6px; height:9px; background:var(--yellow-card); border-radius:2px; margin-left:4px;"></span>` : ''}
+          ${p.red ? `<span style="display:inline-block; width:6px; height:9px; background:var(--red-card); border-radius:2px; margin-left:4px;"></span>` : ''}
         </div>
-        <div style="display:flex; align-items:center; gap:6px;">
+        <div style="display:flex; align-items:center; gap:8px;">
           <span style="font-weight:700; color:var(--text-muted); font-size:0.75rem; font-family:ui-monospace, monospace;">${p.minPlayed}'</span>
           ${!p.red ? `<button class="btn-sub sub-in" onclick="substitutePlayer(${p.id})">Entrer</button>` : ''}
           <button style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:0.8rem; padding:0 4px;" onclick="deletePlayer(${p.id})">✕</button>
@@ -1489,7 +1514,7 @@
       btnDark.style.color = "var(--card)";
       btnLight.style.background = "var(--btn-secondary)";
       btnLight.style.color = "var(--btn-secondary-text)";
-      document.querySelector('meta[name="theme-color"]').setAttribute("content", "#090d16");
+      document.querySelector('meta[name="theme-color"]').setAttribute("content", "#0b0f19");
     }
 
     if (document.getElementById('tab-export').classList.contains('active')) {
@@ -1533,7 +1558,7 @@
   }
 
   function resetDefaultTheme() {
-    applyPreset('#0284c7', '#dc2626', '#1e3a2f');
+    applyPreset('#0284c7', '#dc2626', '#194434');
   }
 
   function loadSavedTheme() {
@@ -1721,7 +1746,7 @@
       if (ev.type === 'yellowCard' || ev.type === 'redCard') {
         const cardW = 10;
         const cardH = 14;
-        ctx.fillStyle = ev.type === 'yellowCard' ? "#eab308" : "#dc2626";
+        ctx.fillStyle = ev.type === 'yellowCard' ? "#facc15" : "#dc2626";
         ctx.fillRect(px - cardW / 2, py - cardH / 2, cardW, cardH);
         ctx.strokeStyle = "#090a0c";
         ctx.lineWidth = 1;
@@ -1733,7 +1758,7 @@
         ctx.fillText(`${ev.min}'`, px, py + cardH + 1);
       } else {
         ctx.beginPath();
-        ctx.arc(px, py, 7, 0, Math.PI * 2);
+        ctx.arc(px, py, 7.5, 0, Math.PI * 2);
 
         if (ev.type === 'goal') {
           ctx.fillStyle = ev.team === 'a' ? matchData.theme.teamA : matchData.theme.teamB;
@@ -1751,7 +1776,7 @@
         ctx.stroke();
 
         ctx.fillStyle = getContrastColor(ctx.fillStyle);
-        ctx.font = "800 7px sans-serif";
+        ctx.font = "800 7.5px sans-serif";
         ctx.textAlign = "center";
         ctx.fillText(`${ev.min}'`, px, py + 2.5);
       }
@@ -1864,8 +1889,8 @@
       const teamName = ev.team === 'a' ? matchData.teamA : matchData.teamB;
 
       return `
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid var(--divider);">
-          <span><strong style="font-family:ui-monospace, monospace;">${ev.min}'</strong> <span style="font-weight:700; color:${teamColor}; text-transform:uppercase; font-size:0.7rem;">[${teamName}]</span> ${label} ${ev.player ? `— ${ev.player}` : ''}</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 2px; border-bottom:1px solid var(--divider);">
+          <span><strong style="font-family:ui-monospace, monospace;">${ev.min}'</strong> <span style="font-weight:700; color:${teamColor}; text-transform:uppercase; font-size:0.72rem;">[${teamName}]</span> ${label} ${ev.player ? `— ${ev.player}` : ''}</span>
           <button style="background:none; border:none; color:var(--text-muted); font-size:0.75rem; cursor:pointer;" onclick="deleteEvent(${ev.id})">✕</button>
         </div>
       `;
@@ -1917,43 +1942,29 @@
     document.getElementById('stat-reds-b').textContent = redsB;
   }
 
-  /* DESSIN DU NOUVEAU LOGO DLY SUR LE CANVAS (STYLE VECTORIEL PREMIUM) */
+  /* LOGO DLY POUR FOND CLAIR */
   function drawDLYLogoOnCanvas(xctx, x, y, size) {
     xctx.save();
     xctx.translate(x, y);
     const scale = size / 100;
     xctx.scale(scale, scale);
 
-    // Écusson profilé
+    // Blason blanc cerclé de la couleur de l'équipe
     xctx.beginPath();
-    xctx.moveTo(50, 4);
-    xctx.lineTo(92, 18);
-    xctx.lineTo(84, 72);
-    xctx.lineTo(50, 96);
-    xctx.lineTo(16, 72);
-    xctx.lineTo(8, 18);
+    xctx.moveTo(50, 6);
+    xctx.bezierCurveTo(75, 6, 90, 14, 90, 24);
+    xctx.bezierCurveTo(90, 60, 76, 80, 50, 94);
+    xctx.bezierCurveTo(24, 80, 10, 60, 10, 24);
+    xctx.bezierCurveTo(10, 14, 25, 6, 50, 6);
     xctx.closePath();
 
-    xctx.fillStyle = "#0a0f1d";
+    xctx.fillStyle = "#ffffff";
     xctx.fill();
     xctx.strokeStyle = matchData.theme.teamA;
     xctx.lineWidth = 5;
     xctx.stroke();
 
-    // Liseré interne biseauté
-    xctx.beginPath();
-    xctx.moveTo(50, 11);
-    xctx.lineTo(85, 23);
-    xctx.lineTo(78, 68);
-    xctx.lineTo(50, 88);
-    xctx.lineTo(22, 68);
-    xctx.lineTo(15, 23);
-    xctx.closePath();
-    xctx.strokeStyle = "rgba(255,255,255,0.2)";
-    xctx.lineWidth = 1.5;
-    xctx.stroke();
-
-    // Étoile de club
+    // Étoile
     xctx.fillStyle = matchData.theme.teamA;
     xctx.beginPath();
     const star = [[50,16],[52.5,21.5],[58,21.5],[53.5,25],[55.5,30.5],[50,27],[44.5,30.5],[46.5,25],[42,21.5],[47.5,21.5]];
@@ -1964,17 +1975,16 @@
     xctx.closePath();
     xctx.fill();
 
-    // DLY
-    xctx.font = "900 25px 'Impact', -apple-system, sans-serif";
-    xctx.fillStyle = "#ffffff";
+    // Typo DLY sombre bien lisible
+    xctx.font = "900 24px -apple-system, sans-serif";
+    xctx.fillStyle = "#0f172a";
     xctx.textAlign = "center";
     xctx.textBaseline = "middle";
     xctx.fillText("DLY", 50, 56);
 
-    // Ligne sous le monogramme
     xctx.beginPath();
-    xctx.moveTo(30, 68);
-    xctx.lineTo(70, 68);
+    xctx.moveTo(34, 68);
+    xctx.lineTo(66, 68);
     xctx.strokeStyle = matchData.theme.teamA;
     xctx.lineWidth = 3.5;
     xctx.lineCap = "round";
@@ -1983,7 +1993,7 @@
     xctx.restore();
   }
 
-  /* NOUVEAU RENDU AFFICHE SOCIAL MEDIA (INSTAGRAM 1080x1350) */
+  /* NOUVEAU RENDU VISUEL ÉDITORIAL CLAIR (1080x1350) */
   function renderExportCanvas() {
     const expCanvas = document.getElementById('exportCanvas');
     const xctx = expCanvas.getContext('2d');
@@ -1993,64 +2003,61 @@
     expCanvas.width = w;
     expCanvas.height = h;
 
-    // 1. FOND SOMBRE ATMOSPHÈRE DE STADE
-    const bgGrad = xctx.createLinearGradient(0, 0, w, h);
-    bgGrad.addColorStop(0, "#080c14");
-    bgGrad.addColorStop(0.5, "#0d1527");
-    bgGrad.addColorStop(1, "#05070c");
+    // 1. Fond clair lumineux
+    const bgGrad = xctx.createLinearGradient(0, 0, 0, h);
+    bgGrad.addColorStop(0, "#f8fafc");
+    bgGrad.addColorStop(1, "#edf2f7");
     xctx.fillStyle = bgGrad;
     xctx.fillRect(0, 0, w, h);
 
-    // Halo lumineux central derrière le score
-    const glow = xctx.createRadialGradient(w / 2, 280, 10, w / 2, 280, 360);
-    glow.addColorStop(0, "rgba(2, 132, 199, 0.22)");
-    glow.addColorStop(1, "rgba(0, 0, 0, 0)");
-    xctx.fillStyle = glow;
-    xctx.fillRect(0, 50, w, 500);
-
-    // Bandes graphiques sportives diagonales très subtiles
-    xctx.strokeStyle = "rgba(255, 255, 255, 0.02)";
-    xctx.lineWidth = 30;
-    for (let x = -200; x < w + 400; x += 120) {
+    // Cadre extérieur blanc avec bordure douce
+    xctx.fillStyle = "#ffffff";
+    if (xctx.roundRect) {
       xctx.beginPath();
-      xctx.moveTo(x, 0);
-      xctx.lineTo(x - 300, h);
+      xctx.roundRect(28, 28, w - 56, h - 56, 24);
+      xctx.fill();
+      xctx.strokeStyle = "#e2e8f0";
+      xctx.lineWidth = 2;
+      xctx.stroke();
+    } else {
+      xctx.fillRect(28, 28, w - 56, h - 56);
+      xctx.strokeStyle = "#e2e8f0";
+      xctx.lineWidth = 2;
+      xctx.strokeRect(28, 28, w - 56, h - 56);
+    }
+
+    // 2. Header
+    drawDLYLogoOnCanvas(xctx, 60, 58, 80);
+
+    // Badge "SCORE FINAL"
+    xctx.fillStyle = "#f1f5f9";
+    if (xctx.roundRect) {
+      xctx.beginPath();
+      xctx.roundRect(w / 2 - 120, 68, 240, 38, 19);
+      xctx.fill();
+      xctx.strokeStyle = "#cbd5e1";
+      xctx.lineWidth = 1;
       xctx.stroke();
     }
 
-    // Bordure d'encadrement biseautée
-    xctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
-    xctx.lineWidth = 2;
-    xctx.strokeRect(30, 30, w - 60, h - 60);
-
-    // 2. HEADER BAR & LOGO DLY
-    drawDLYLogoOnCanvas(xctx, 70, 65, 75);
-
-    // Badge "FULL TIME" central
-    xctx.fillStyle = "rgba(255, 255, 255, 0.08)";
-    xctx.fillRect(w / 2 - 120, 68, 240, 38);
-    xctx.strokeStyle = "rgba(255, 255, 255, 0.25)";
-    xctx.lineWidth = 1;
-    xctx.strokeRect(w / 2 - 120, 68, 240, 38);
-
-    xctx.fillStyle = "#f8fafc";
-    xctx.font = "800 15px -apple-system, sans-serif";
+    xctx.fillStyle = "#334155";
+    xctx.font = "800 14px -apple-system, sans-serif";
     xctx.textAlign = "center";
     xctx.letterSpacing = "2px";
     xctx.fillText("SCORE FINAL • FT", w / 2, 92);
 
-    // Date / Watermark top right
+    // Date
     const dateStr = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
     xctx.fillStyle = "#64748b";
     xctx.font = "700 14px ui-monospace, monospace";
     xctx.textAlign = "right";
-    xctx.fillText(dateStr, w - 70, 92);
+    xctx.fillText(dateStr, w - 65, 92);
 
-    // 3. SCOREBOARD CARD PRO
-    const teamAY = 200;
-    
-    // Noms des équipes (typographie athlétique imposante)
-    xctx.font = "900 36px 'Impact', -apple-system, sans-serif";
+    // 3. Scoreboard Card
+    const teamAY = 195;
+
+    // Noms des équipes
+    xctx.font = "900 36px -apple-system, sans-serif";
     xctx.fillStyle = matchData.theme.teamA;
     xctx.textAlign = "center";
     xctx.fillText(matchData.teamA.toUpperCase(), w * 0.26, teamAY);
@@ -2058,24 +2065,19 @@
     xctx.fillStyle = matchData.theme.teamB;
     xctx.fillText(matchData.teamB.toUpperCase(), w * 0.74, teamAY);
 
-    // Chiffres du score géants
+    // Score géant noir franc
     xctx.font = "900 120px ui-monospace, SFMono-Regular, monospace";
-    xctx.fillStyle = "#ffffff";
+    xctx.fillStyle = "#0f172a";
     xctx.textAlign = "center";
-    xctx.shadowColor = "rgba(0,0,0,0.8)";
-    xctx.shadowBlur = 15;
     xctx.fillText(`${matchData.scoreA}  :  ${matchData.scoreB}`, w / 2, teamAY + 105);
-    xctx.shadowBlur = 0;
 
-    // 4. BUTEURS DU MATCH (SCINDÉS DOMICILE / EXTÉRIEUR)
+    // Buteurs
     const goalsA = matchData.events.filter(e => e.type === 'goal' && e.team === 'a');
     const goalsB = matchData.events.filter(e => e.type === 'goal' && e.team === 'b');
 
     xctx.font = "600 16px -apple-system, sans-serif";
-    
-    // Domicile
-    xctx.fillStyle = "#94a3b8";
-    xctx.textAlign = "center";
+    xctx.fillStyle = "#475569";
+
     if (goalsA.length === 0 && matchData.scoreA > 0) {
       xctx.fillText(`${matchData.scoreA} but(s)`, w * 0.26, teamAY + 155);
     } else {
@@ -2084,7 +2086,6 @@
       });
     }
 
-    // Extérieur
     if (goalsB.length === 0 && matchData.scoreB > 0) {
       xctx.fillText(`${matchData.scoreB} but(s)`, w * 0.74, teamAY + 155);
     } else {
@@ -2093,26 +2094,21 @@
       });
     }
 
-    // 5. STATISTIQUES EN JAUGE VISUELLE COMPARATIVE
-    const statsTop = 490;
+    // 4. Statistiques de confrontation
+    const statsTop = 485;
 
-    // Titre section
-    xctx.fillStyle = "#475569";
+    xctx.fillStyle = "#64748b";
     xctx.font = "800 13px -apple-system, sans-serif";
-    xctx.letterSpacing = "3px";
+    xctx.letterSpacing = "2px";
     xctx.textAlign = "center";
-    xctx.fillText("STATISTIQUES DE CONFRONTATION", w / 2, statsTop);
+    xctx.fillText("STATISTIQUES DU MATCH", w / 2, statsTop);
 
-    // Calculs
     const shotsA = matchData.events.filter(e => e.team === 'a' && (e.type === 'goal' || e.type === 'onTarget' || e.type === 'offTarget')).length;
     const shotsB = matchData.events.filter(e => e.team === 'b' && (e.type === 'goal' || e.type === 'onTarget' || e.type === 'offTarget')).length;
-
     const targetA = matchData.events.filter(e => e.team === 'a' && (e.type === 'goal' || e.type === 'onTarget')).length;
     const targetB = matchData.events.filter(e => e.team === 'b' && (e.type === 'goal' || e.type === 'onTarget')).length;
-
     const foulsA = matchData.events.filter(e => e.team === 'a' && (e.type === 'foul' || e.type === 'yellowCard' || e.type === 'redCard')).length;
     const foulsB = matchData.events.filter(e => e.team === 'b' && (e.type === 'foul' || e.type === 'yellowCard' || e.type === 'redCard')).length;
-
     const yellowsA = matchData.events.filter(e => e.team === 'a' && e.type === 'yellowCard').length;
     const yellowsB = matchData.events.filter(e => e.team === 'b' && e.type === 'yellowCard').length;
 
@@ -2121,70 +2117,82 @@
     drawComparisonBar(xctx, "Fautes commises", foulsA, foulsB, statsTop + 145, w);
     drawComparisonBar(xctx, "Cartons jaunes", yellowsA, yellowsB, statsTop + 200, w);
 
-    // 6. MINI TERRAIN TACTIQUE ENCADRÉ
-    const mapY = 790;
+    // 5. Carte des tirs
+    const mapY = 785;
     const mapW = 680;
     const mapH = 380;
     const mapX = (w - mapW) / 2;
 
-    xctx.fillStyle = "rgba(255, 255, 255, 0.04)";
-    xctx.fillRect(mapX - 10, mapY - 35, mapW + 20, mapH + 48);
-    xctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
-    xctx.lineWidth = 1;
-    xctx.strokeRect(mapX - 10, mapY - 35, mapW + 20, mapH + 48);
+    xctx.fillStyle = "#f8fafc";
+    if (xctx.roundRect) {
+      xctx.beginPath();
+      xctx.roundRect(mapX - 12, mapY - 36, mapW + 24, mapH + 48, 16);
+      xctx.fill();
+      xctx.strokeStyle = "#e2e8f0";
+      xctx.lineWidth = 1.5;
+      xctx.stroke();
+    }
 
-    xctx.fillStyle = "#94a3b8";
+    xctx.fillStyle = "#475569";
     xctx.font = "800 13px -apple-system, sans-serif";
     xctx.letterSpacing = "2px";
     xctx.textAlign = "center";
-    xctx.fillText("DISTRIBUTION DES IMPACTS & ACTIONS", w / 2, mapY - 14);
+    xctx.fillText("DISTRIBUTION DES ACTIONS SUR LE TERRAIN", w / 2, mapY - 14);
 
-    // Dessin du pitch réel sur l'affiche
+    xctx.save();
+    if (xctx.roundRect) {
+      xctx.beginPath();
+      xctx.roundRect(mapX, mapY, mapW, mapH, 12);
+      xctx.clip();
+    }
     xctx.drawImage(canvas, mapX, mapY, mapW, mapH);
+    xctx.restore();
 
-    // 7. FOOTER BRANDING OFFICIEL
-    xctx.fillStyle = "#475569";
-    xctx.font = "700 14px ui-monospace, monospace";
+    // 6. Footer
+    xctx.fillStyle = "#94a3b8";
+    xctx.font = "700 13px ui-monospace, monospace";
     xctx.letterSpacing = "2px";
     xctx.textAlign = "center";
-    xctx.fillText("DLY SPORTS ANALYTICS • MATCHDAY TRACKER", w / 2, h - 55);
+    xctx.fillText("MATCHDAY TRACKER • DLY SPORTS", w / 2, h - 55);
   }
 
-  /* DESSIN D'UNE JAUGE DOUBLE DIRECTIONNELLE PRO */
+  /* BARRES DE CONFRONTATION VISUELLES SUR FOND CLAIR */
   function drawComparisonBar(xctx, label, valA, valB, y, w) {
     const total = valA + valB;
     const pctA = total === 0 ? 0.5 : Math.max(0.12, Math.min(0.88, valA / total));
     
     const barW = 540;
-    const barH = 8;
+    const barH = 10;
     const barX = (w - barW) / 2;
 
-    // Label central
-    xctx.fillStyle = "#cbd5e1";
+    xctx.fillStyle = "#1e293b";
     xctx.font = "700 14px -apple-system, sans-serif";
     xctx.textAlign = "center";
     xctx.fillText(label.toUpperCase(), w / 2, y);
 
-    // Chiffres A et B aux extrémités
     xctx.font = "800 20px ui-monospace, SFMono-Regular, monospace";
     xctx.fillStyle = matchData.theme.teamA;
     xctx.textAlign = "right";
-    xctx.fillText(valA.toString(), barX - 18, y + 16);
+    xctx.fillText(valA.toString(), barX - 18, y + 17);
 
     xctx.fillStyle = matchData.theme.teamB;
     xctx.textAlign = "left";
-    xctx.fillText(valB.toString(), barX + barW + 18, y + 16);
+    xctx.fillText(valB.toString(), barX + barW + 18, y + 17);
 
-    // Fond neutre de la barre
-    xctx.fillStyle = "#1e293b";
-    xctx.fillRect(barX, y + 8, barW, barH);
+    // Fond neutre gris clair
+    xctx.fillStyle = "#e2e8f0";
+    if (xctx.roundRect) {
+      xctx.beginPath();
+      xctx.roundRect(barX, y + 8, barW, barH, 5);
+      xctx.fill();
+    } else {
+      xctx.fillRect(barX, y + 8, barW, barH);
+    }
 
-    // Remplissage côté A
     const fillA = barW * pctA;
     xctx.fillStyle = matchData.theme.teamA;
     xctx.fillRect(barX, y + 8, fillA - 2, barH);
 
-    // Remplissage côté B
     xctx.fillStyle = matchData.theme.teamB;
     xctx.fillRect(barX + fillA + 2, y + 8, barW - fillA - 2, barH);
   }
