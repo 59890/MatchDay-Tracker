@@ -3,33 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Rehab Périostite — Guide & Réathlétisation</title>
+  <title>MatchDay Tracker — Carnet de Match</title>
   
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Rehab Tibia">
-  <meta name="theme-color" content="#0d9488">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="MatchTracker">
+  <meta name="theme-color" content="#0f172a">
 
   <style>
     :root {
-      --bg: #f8fafc;
-      --card: #ffffff;
-      --border: #e2e8f0;
-      --text: #0f172a;
-      --text-muted: #64748b;
-      --teal: #0d9488;
-      --teal-light: #f0fdfa;
-      --teal-border: #99f6e4;
-      --blue: #0284c7;
-      --blue-light: #f0f9ff;
-      --amber: #d97706;
-      --amber-light: #fffbeb;
-      --red: #e11d48;
-      --red-light: #fff1f2;
+      --bg: #0b1120;
+      --card: #1e293b;
+      --card-border: #334155;
+      --pitch: #15803d;
+      --pitch-lines: rgba(255, 255, 255, 0.7);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      
       --green: #10b981;
-      --radius-lg: 16px;
-      --radius-md: 12px;
-      --shadow: 0 2px 10px -2px rgba(15, 23, 42, 0.06);
+      --green-glow: rgba(16, 185, 129, 0.3);
+      --blue: #38bdf8;
+      --red: #f43f5e;
+      --amber: #f59e0b;
+      --purple: #a855f7;
+
+      --radius-xl: 18px;
+      --radius-lg: 12px;
+      --radius-md: 8px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -38,510 +38,434 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.5;
-      padding-bottom: 90px;
+      line-height: 1.4;
+      padding-bottom: 95px;
     }
 
-    .container { max-width: 640px; margin: 0 auto; padding: 16px 14px; }
+    .container { max-width: 600px; margin: 0 auto; padding: 12px; }
 
-    /* Header */
-    header {
-      background: #ffffff;
-      border-bottom: 1px solid var(--border);
+    /* Top Scoreboard Header */
+    .scoreboard {
+      background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-xl);
       padding: 16px 14px;
-      position: sticky;
-      top: 0;
-      z-index: 40;
+      margin-bottom: 12px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
     }
 
-    .header-content {
-      max-width: 640px;
-      margin: 0 auto;
+    .match-meta {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
     }
 
-    .logo-title {
-      font-size: 1.25rem;
+    .match-timer-badge {
+      background: #0284c7;
+      color: #fff;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-weight: 900;
+      font-size: 0.85rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .teams-score-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .team-box {
+      flex: 1;
+      text-align: center;
+    }
+
+    .team-name {
+      font-size: 1rem;
+      font-weight: 900;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .score-display {
+      font-size: 2.6rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      color: #fff;
+      min-width: 100px;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .score-controls {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn-timer {
+      background: #334155;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: var(--radius-md);
+      font-size: 0.75rem;
       font-weight: 800;
-      color: var(--teal);
+      cursor: pointer;
+    }
+
+    .btn-timer.active { background: var(--green); }
+
+    /* Action Picker for Pitch */
+    .event-selector {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .action-btn {
+      background: var(--card);
+      border: 1.5px solid var(--card-border);
+      color: var(--text-muted);
+      border-radius: var(--radius-md);
+      padding: 8px 4px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      transition: all 0.15s;
+    }
+
+    .action-btn span { font-size: 1rem; }
+    .action-btn.active {
+      border-color: var(--green);
+      background: rgba(16, 185, 129, 0.15);
+      color: #fff;
+    }
+
+    /* Interactive Canvas Pitch */
+    .pitch-container {
+      position: relative;
+      width: 100%;
+      background: var(--pitch);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.5);
+      touch-action: none;
+      margin-bottom: 12px;
+    }
+
+    #pitchCanvas {
+      width: 100%;
+      height: 280px;
+      display: block;
+      cursor: crosshair;
+    }
+
+    .pitch-legend {
+      display: flex;
+      justify-content: space-around;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    /* Cards & Lists */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-xl);
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 900;
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
-    .badge-sub {
-      font-size: 0.72rem;
-      font-weight: 700;
-      background: var(--teal-light);
-      color: var(--teal);
-      padding: 3px 8px;
-      border-radius: 20px;
-      border: 1px solid var(--teal-border);
+    /* Player Lineup & Minutes */
+    .player-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 6px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.82rem;
     }
 
-    /* Navigation Bar */
+    .player-badge {
+      width: 22px;
+      height: 22px;
+      background: #334155;
+      color: #fff;
+      border-radius: 50%;
+      display: inline-grid;
+      place-content: center;
+      font-size: 0.7rem;
+      font-weight: 900;
+      margin-right: 6px;
+    }
+
+    .btn-sub {
+      background: #334155;
+      color: #fff;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .btn-sub.sub-in { background: var(--green); color: #000; }
+    .btn-sub.sub-out { background: var(--red); color: #fff; }
+
+    /* Canvas Export Card */
+    #exportCanvas {
+      width: 100%;
+      height: auto;
+      border-radius: var(--radius-lg);
+      background: #0f172a;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: #0b1120;
+      border: none;
+      width: 100%;
+      padding: 12px;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* Bottom Navigation Bar */
     .nav-bar {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      background: #ffffff;
-      border-top: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.96);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--card-border);
       display: flex;
       justify-content: space-around;
       padding: 8px 6px;
-      z-index: 50;
-      box-shadow: 0 -4px 12px rgba(0,0,0,0.04);
+      z-index: 100;
     }
 
-    .nav-item {
+    .nav-btn {
       background: transparent;
       border: none;
+      color: var(--text-muted);
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 3px;
       font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      cursor: pointer;
-      width: 20%;
-    }
-
-    .nav-item svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; }
-    .nav-item.active { color: var(--teal); }
-
-    /* Cards */
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 18px 16px;
-      margin-bottom: 16px;
-      box-shadow: var(--shadow);
-    }
-
-    .card-title {
-      font-size: 1.05rem;
       font-weight: 800;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-
-    /* Warning boxes */
-    .alert {
-      padding: 12px 14px;
-      border-radius: var(--radius-md);
-      font-size: 0.85rem;
-      margin-bottom: 14px;
-      display: flex;
-      gap: 10px;
-      line-height: 1.45;
-    }
-
-    .alert-amber { background: var(--amber-light); border: 1px solid #fde68a; color: #92400e; }
-    .alert-red { background: var(--red-light); border: 1px solid #fecdd3; color: #9f1239; }
-    .alert-teal { background: var(--teal-light); border: 1px solid var(--teal-border); color: #115e59; }
-
-    /* SVG Illustration Container */
-    .illustration-box {
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 16px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 12px 0 16px;
-      overflow: hidden;
-    }
-
-    .illustration-box svg { max-width: 100%; height: auto; }
-
-    /* Tabs */
-    .sub-tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 14px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-    }
-
-    .sub-tab-btn {
-      background: #ffffff;
-      border: 1.5px solid var(--border);
-      border-radius: 20px;
-      padding: 6px 14px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--text-muted);
       cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.2s;
+      width: 25%;
     }
 
-    .sub-tab-btn.active {
-      background: var(--teal);
-      border-color: var(--teal);
-      color: #ffffff;
-    }
+    .nav-btn svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2.2; }
+    .nav-btn.active { color: var(--green); }
 
-    /* Exercise item */
-    .exo-item {
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 14px;
-      margin-bottom: 10px;
-      background: #ffffff;
-      transition: all 0.2s;
-    }
-
-    .exo-item.done {
-      border-color: var(--green);
-      background: #f0fdf4;
-    }
-
-    .exo-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 10px;
-    }
-
-    .exo-title {
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: var(--text);
-    }
-
-    .exo-pill {
-      font-size: 0.7rem;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 6px;
-      background: var(--teal-light);
-      color: var(--teal);
-      white-space: nowrap;
-    }
-
-    .exo-meta {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--blue);
-      margin: 4px 0 8px;
-    }
-
-    .exo-instructions {
-      font-size: 0.84rem;
-      color: var(--text-muted);
-      margin-bottom: 10px;
-      line-height: 1.45;
-    }
-
-    .exo-actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 8px;
-      border-top: 1px dashed var(--border);
-    }
-
-    .btn-timer {
-      background: var(--teal);
-      color: #fff;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .check-btn {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      cursor: pointer;
-    }
-
-    .check-box {
-      width: 20px;
-      height: 20px;
-      border: 2px solid #cbd5e1;
-      border-radius: 6px;
-      display: grid;
-      place-content: center;
-      background: #fff;
-      transition: all 0.2s;
-    }
-
-    .exo-item.done .check-box {
-      background: var(--green);
-      border-color: var(--green);
-    }
-
-    .exo-item.done .check-box::before {
-      content: "✓";
-      color: #ffffff;
-      font-weight: 900;
-      font-size: 13px;
-    }
-
-    /* Return to Run table */
-    .rtr-step {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 12px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      margin-bottom: 8px;
-      background: #fff;
-    }
-
-    .rtr-step.current {
-      border-color: var(--teal);
-      background: var(--teal-light);
-    }
-
-    .rtr-info h4 { font-size: 0.9rem; font-weight: 800; color: var(--text); }
-    .rtr-info p { font-size: 0.78rem; color: var(--text-muted); }
-
-    /* Metronome */
-    .metronome-box {
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 16px;
-      text-align: center;
-      margin-top: 14px;
-    }
-
-    .bpm-display {
-      font-size: 2.2rem;
-      font-weight: 900;
-      color: var(--teal);
-    }
-
-    .bpm-slider {
-      width: 100%;
-      margin: 12px 0;
-      accent-color: var(--teal);
-    }
-
-    /* Section management */
-    .section-view { display: none; }
-    .section-view.active { display: block; }
+    .view-tab { display: none; }
+    .view-tab.active { display: block; }
   </style>
 </head>
 <body>
 
-<header>
-  <div class="header-content">
-    <div class="logo-title">
-      <span>Rehab Tibia</span> 🦵
-    </div>
-    <span class="badge-sub">Guide & Réathlétisation</span>
-  </div>
-</header>
-
 <div class="container">
 
-  <!-- ================= VUE 1 : COMPRENDRE ================= -->
-  <section id="view-comprendre" class="section-view active">
+  <!-- SCOREBOARD TOP WIDGET (TOUJOURS VISIBLE) -->
+  <div class="scoreboard">
+    <div class="match-meta">
+      <span id="match-period-label">1ère Mi-temps</span>
+      <div class="match-timer-badge" id="match-clock">00:00</div>
+      <span id="match-date-label">Direct</span>
+    </div>
+
+    <div class="teams-score-row">
+      <div class="team-box">
+        <div class="team-name" id="name-team-a" onclick="renameTeam('a')">Équipe Domicile ✏️</div>
+      </div>
+      <div class="score-display">
+        <span id="score-a">0</span>
+        <span style="opacity: 0.3;">-</span>
+        <span id="score-b">0</span>
+      </div>
+      <div class="team-box">
+        <div class="team-name" id="name-team-b" onclick="renameTeam('b')">Équipe Extérieur ✏️</div>
+      </div>
+    </div>
+
+    <div class="score-controls">
+      <button class="btn-timer" id="btn-clock" onclick="toggleMatchClock()">▶ Démarrer chrono</button>
+      <button class="btn-timer" onclick="switchPeriod()">Mi-temps / Fin</button>
+      <button class="btn-timer" onclick="resetScore()">Reset</button>
+    </div>
+  </div>
+
+  <!-- ================= ONGLET 1 : TERRAIN & ACTIONS DIRECTES ================= -->
+  <section id="tab-pitch" class="view-tab active">
     
+    <!-- Action selector before tapping the pitch -->
+    <div class="event-selector">
+      <button class="action-btn active" id="act-goal" onclick="selectAction('goal')">
+        <span>⚽</span> But
+      </button>
+      <button class="action-btn" id="act-onTarget" onclick="selectAction('onTarget')">
+        <span>🎯</span> Tir Cadré
+      </button>
+      <button class="action-btn" id="act-offTarget" onclick="selectAction('offTarget')">
+        <span>💨</span> Non Cadré
+      </button>
+      <button class="action-btn" id="act-foul" onclick="selectAction('foul')">
+        <span>⚠️</span> Faute
+      </button>
+    </div>
+
+    <!-- Interactive Pitch -->
+    <div class="pitch-container">
+      <canvas id="pitchCanvas" width="600" height="380"></canvas>
+    </div>
+
+    <div class="pitch-legend">
+      <span>🟢 But</span>
+      <span>🔵 Cadré</span>
+      <span>⚪ Non cadré</span>
+      <span>🟡 Faute</span>
+    </div>
+
+    <!-- Quick stats summary card -->
     <div class="card">
-      <div class="card-title">📖 Qu'est-ce que la périostite tibiale ?</div>
-      <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 12px;">
-        La périostite tibiale (ou <em>syndrome de stress tibial</em>) est une <strong>irritation inflammatoire de la membrane osseuse (le périoste)</strong> qui enveloppe le tibia. Elle survient typiquement là où s'insèrent les muscles puissants du mollet (soléaire et tibial postérieur).
-      </p>
-
-      <!-- SVG SCHEMA ANATOMIQUE DU TIBIA -->
-      <div class="illustration-box">
-        <svg viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">
-          <!-- Background bone shape (Tibia) -->
-          <path d="M 170 20 L 210 20 C 215 40 205 70 202 120 C 200 160 208 200 215 220 L 165 220 C 172 200 180 160 178 120 C 175 70 165 40 170 20 Z" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2"/>
-          <text x="190" y="55" font-size="11" font-weight="700" fill="#64748b" text-anchor="middle">Tibia</text>
-          
-          <!-- Periosteum Inflammation Zone -->
-          <path d="M 166 125 C 167 150 172 175 174 195" fill="none" stroke="#e11d48" stroke-width="8" stroke-linecap="round"/>
-          <circle cx="170" cy="160" r="14" fill="rgba(225, 29, 72, 0.2)" />
-          
-          <!-- Callout lines -->
-          <line x1="170" y1="160" x2="60" y2="160" stroke="#e11d48" stroke-width="1.5" stroke-dasharray="3,3"/>
-          <rect x="10" y="142" width="115" height="36" rx="6" fill="#fff" stroke="#e11d48" stroke-width="1.5"/>
-          <text x="67" y="157" font-size="10" font-weight="800" fill="#e11d48" text-anchor="middle">Zone douloureuse</text>
-          <text x="67" y="170" font-size="9" fill="#64748b" text-anchor="middle">1/3 inféro-interne</text>
-
-          <!-- Soleus / Deep calf pull -->
-          <path d="M 201 110 C 230 130 240 170 220 205" fill="none" stroke="#0284c7" stroke-width="3" stroke-dasharray="4,2"/>
-          <text x="290" y="145" font-size="10" font-weight="700" fill="#0284c7">Traction mécanique</text>
-          <text x="290" y="160" font-size="9" fill="#64748b">(Soléaire & Tibial post.)</text>
-          <line x1="218" y1="145" x2="282" y2="145" stroke="#0284c7" stroke-width="1.5"/>
-        </svg>
-      </div>
-
-      <div class="alert alert-amber">
-        <span>⚠️</span>
-        <div><strong>Le mythe du repos total :</strong> Arrêter de courir pendant 2 mois soulage temporairement la douleur mais affaiblit encore plus vos tendons et l'os. Dès la reprise, la douleur réapparaît. La clé est la <strong>reprise progressive avec renforcement de la tolérance tissulaire</strong>.</div>
+      <div class="card-title">📊 Stats du match</div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; text-align:center;">
+        <div style="background:#0f172a; padding:8px; border-radius:8px;">
+          <div style="font-size:1.2rem; font-weight:900;" id="stat-shots">0</div>
+          <div style="font-size:0.7rem; color:var(--text-muted);">Tirs totaux</div>
+        </div>
+        <div style="background:#0f172a; padding:8px; border-radius:8px;">
+          <div style="font-size:1.2rem; font-weight:900; color:var(--blue);" id="stat-on-target">0</div>
+          <div style="font-size:0.7rem; color:var(--text-muted);">Tirs cadrés</div>
+        </div>
+        <div style="background:#0f172a; padding:8px; border-radius:8px;">
+          <div style="font-size:1.2rem; font-weight:900; color:var(--amber);" id="stat-fouls">0</div>
+          <div style="font-size:0.7rem; color:var(--text-muted);">Fautes</div>
+        </div>
       </div>
     </div>
 
-    <!-- BIOMECANIQUE & CADENCE -->
+    <!-- Recent events feed -->
     <div class="card">
-      <div class="card-title">🏃‍♂️ Biomécanique : Pourquoi vous avez mal ?</div>
-
-      <!-- SVG CADENCE ET IMPACT -->
-      <div class="illustration-box">
-        <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
-          <!-- Bad posture (Overstride) -->
-          <g transform="translate(40, 20)">
-            <text x="50" y="15" font-size="11" font-weight="800" fill="#e11d48" text-anchor="middle">Cadence basse (<160 ppm)</text>
-            <circle cx="50" cy="40" r="10" fill="#cbd5e1"/>
-            <line x1="50" y1="50" x2="45" y2="90" stroke="#64748b" stroke-width="3"/>
-            <line x1="45" y1="90" x2="80" y2="130" stroke="#e11d48" stroke-width="3"/> <!-- Leg out in front -->
-            <line x1="80" y1="130" x2="90" y2="140" stroke="#e11d48" stroke-width="3"/>
-            <path d="M 85 145 L 85 170" stroke="#e11d48" stroke-width="2" marker-end="url(#arrow)"/>
-            <text x="50" y="165" font-size="9" fill="#e11d48" text-anchor="middle">Gros freinage talon</text>
-            <text x="50" y="177" font-size="8" fill="#64748b" text-anchor="middle">Onde de choc x3 dans le tibia</text>
-          </g>
-
-          <!-- Good posture (Optimal cadence) -->
-          <g transform="translate(240, 20)">
-            <text x="50" y="15" font-size="11" font-weight="800" fill="#10b981" text-anchor="middle">Cadence idéale (175-180 ppm)</text>
-            <circle cx="50" cy="40" r="10" fill="#cbd5e1"/>
-            <line x1="50" y1="50" x2="52" y2="90" stroke="#64748b" stroke-width="3"/>
-            <line x1="52" y1="90" x2="54" y2="135" stroke="#10b981" stroke-width="3"/> <!-- Leg under hip -->
-            <line x1="54" y1="135" x2="62" y2="140" stroke="#10b981" stroke-width="3"/>
-            <text x="50" y="165" font-size="9" fill="#10b981" text-anchor="middle">Pose sous le bassin</text>
-            <text x="50" y="177" font-size="8" fill="#64748b" text-anchor="middle">Moins d'impact, rebond élastique</text>
-          </g>
-        </svg>
-      </div>
-
-      <div style="font-size: 0.85rem; color: var(--text-muted);">
-        <p><strong>Les 3 facteurs déclencheurs majeurs :</strong></p>
-        <ul style="margin: 8px 0 0 18px;">
-          <li><strong>Le pic de charge :</strong> Augmentation trop rapide du kilométrage hebdomadaire (> 10% par semaine).</li>
-          <li><strong>L'overstriding (attaque talon trop en avant) :</strong> Le pied touche le sol loin devant le genou, envoyant toute l'onde de choc directement dans l'os tibial.</li>
-          <li><strong>Déficit de force du soléaire :</strong> Le soléaire (muscle sous les jumeaux du mollet) absorbe jusqu'à 6 à 8 fois le poids du corps en course. S'il faiblit, l'os subit tout.</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- FEUX TRICOLORES DE LA DOULEUR -->
-    <div class="card">
-      <div class="card-title">🚦 La règle de la douleur (Échelle 0-10)</div>
-      <div class="alert alert-teal">
-        <div>
-          <strong>Zone Verte (0 à 2/10) :</strong> Gêne tolérée pendant l'effort. Pas d'augmentation de la douleur le lendemain matin. <em>Vous pouvez continuer.</em>
-        </div>
-      </div>
-      <div class="alert alert-amber">
-        <div>
-          <strong>Zone Orange (3 à 5/10) :</strong> Douleur sensible mais stable. Si elle disparaît 1h après la séance et que le réveil est indolore, la charge est acceptable.
-        </div>
-      </div>
-      <div class="alert alert-red">
-        <div>
-          <strong>Zone Rouge (> 5/10 ou douleur matinale) :</strong> Si vous boitez ou si la douleur s'aggrave le lendemain matin au saut du lit, l'os est surchargé. <em>Réduisez la charge d'un cran.</em>
-        </div>
+      <div class="card-title">⏱ Fil du match</div>
+      <div id="events-timeline" style="max-height:160px; overflow-y:auto; font-size:0.8rem;">
+        <p style="color:var(--text-muted); text-align:center; padding:10px;">Touchez le terrain pour consigner les actions.</p>
       </div>
     </div>
 
   </section>
 
-  <!-- ================= VUE 2 : EXERCICES DE RENFORCEMENT ================= -->
-  <section id="view-exercices" class="section-view">
-    
-    <div class="card">
-      <div class="card-title">💪 Protocole de Renforcement Ciblé</div>
-      <div class="sub-tabs">
-        <button class="sub-tab-btn active" onclick="switchExoPhase(1)">Phase 1 : Aiguë / Isométrie</button>
-        <button class="sub-tab-btn" onclick="switchExoPhase(2)">Phase 2 : Force Lourde</button>
-        <button class="sub-tab-btn" onclick="switchExoPhase(3)">Phase 3 : Pliométrie</button>
-      </div>
+  <!-- ================= ONGLET 2 : EFFECTIF & TEMPS DE JEU ================= -->
+  <section id="tab-roster" class="view-tab">
 
-      <div id="exo-container"></div>
+    <div class="card">
+      <div class="card-title" style="justify-content:space-between;">
+        <span>🏃 Titulaires sur le terrain</span>
+        <button class="btn-timer" onclick="addPlayerPrompt('titulaire')">+ Joueur</button>
+      </div>
+      <div id="lineup-starters"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="justify-content:space-between;">
+        <span>🪑 Banc des remplaçants</span>
+        <button class="btn-timer" onclick="addPlayerPrompt('sub')">+ Remplaçant</button>
+      </div>
+      <div id="lineup-subs"></div>
     </div>
 
   </section>
 
-  <!-- ================= VUE 3 : PROTOCOLE REPRISE COURSE ================= -->
-  <section id="view-reprise" class="section-view">
-    
+  <!-- ================= ONGLET 3 : EXPORT VISUEL (POST-MATCH CARD) ================= -->
+  <section id="tab-export" class="view-tab">
+
     <div class="card">
-      <div class="card-title">⏱ Return-to-Run (8 Semaines)</div>
-      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">
-        Protocole progressif d'intervalles marche/course. Ne passez à l'étape suivante que si la séance actuelle est validée <strong>avec une douleur ≤ 2/10 le lendemain matin</strong>.
+      <div class="card-title">🎨 Visuel d'Après-Match Prêt au Partage</div>
+      <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">
+        Image générée automatiquement prête pour WhatsApp, Facebook ou Instagram.
       </p>
 
-      <div id="rtr-list"></div>
+      <canvas id="exportCanvas" width="800" height="950"></canvas>
 
-      <!-- METRONOME CADENCE -->
-      <div class="metronome-box">
-        <div style="font-size: 0.9rem; font-weight: 800;">🎵 Métronome de Cadence</div>
-        <p style="font-size: 0.78rem; color: var(--text-muted);">Synchronisez vos foulées sur les bips pour réduire l'impact au sol (idéal : 175-180 ppm).</p>
-        
-        <div class="bpm-display" id="bpm-val">175 PPM</div>
-        <input type="range" class="bpm-slider" id="bpm-input" min="160" max="190" value="175" oninput="updateBpm(this.value)">
-        
-        <button class="btn-timer" id="btn-metronome" onclick="toggleMetronome()" style="margin: 0 auto; padding: 10px 20px; font-size: 0.9rem;">
-          ▶ Démarrer le métronome
+      <div style="display:flex; gap:8px;">
+        <button class="btn-primary" onclick="downloadExportImage()">
+          📥 Télécharger l'image (PNG)
+        </button>
+        <button class="btn-primary" style="background:#0284c7; color:#fff;" onclick="shareExportImage()">
+          📲 Partager
         </button>
       </div>
     </div>
 
   </section>
 
-  <!-- ================= VUE 4 : TEST & JOURNAL ================= -->
-  <section id="view-journal" class="section-view">
-    
-    <div class="card">
-      <div class="card-title">🩺 Auto-évaluation & Drapeaux Rouges</div>
-      
-      <div class="alert alert-red">
-        <div>
-          <strong>🚩 Alerte Fracture de fatigue :</strong><br>
-          Si la douleur est concentrée sur <strong>un point osseux très précis de moins de 1 cm</strong>, si elle est présente la nuit au repos, ou si sautiller sur une seule jambe est insupportable, arrêtez la course et consultez un médecin du sport pour prescrire une IRM ou une scintigraphie osseuse.
-        </div>
-      </div>
+  <!-- ================= ONGLET 4 : SYNCHRO CLOUD FIREBASE ================= -->
+  <section id="tab-cloud" class="view-tab">
 
-      <p style="font-size: 0.85rem; color: var(--text-muted);">
-        À l'inverse, la périostite tibiale diffuse généralement sur <strong>5 à 10 cm le long de l'arête interne du tibia</strong> et s'atténue souvent légèrement à chaud avant de revenir après refroidissement.
-      </p>
-    </div>
-
-    <!-- JOURNAL DE DOULEUR -->
     <div class="card">
-      <div class="card-title">📝 Journal de Bord Quotidien</div>
-      <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px;">
-        Notez votre niveau de douleur ressenti chaque matin au saut du lit (le meilleur indicateur de la santé de l'os).
+      <div class="card-title">☁️ Synchronisation en direct (Banc & Coach)</div>
+      <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:12px;">
+        Permet à plusieurs personnes sur le banc de voir les stats et le chrono en temps réel.
       </p>
 
-      <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-        <input type="range" min="0" max="10" value="1" id="input-pain" style="flex-grow: 1; accent-color: var(--teal);" oninput="document.getElementById('pain-val').textContent = this.value">
-        <span style="font-weight: 800; font-size: 1.1rem; width: 35px; text-align: center;" id="pain-val">1</span>/10
+      <div style="margin-bottom:10px;">
+        <label style="font-size:0.75rem; font-weight:800; color:var(--text-muted);">CODE UNIQUE DU MATCH :</label>
+        <input type="text" id="cloud-match-code" value="MATCH-FRE-01" style="width:100%; padding:10px; background:#0f172a; border:1.5px solid var(--card-border); color:#fff; border-radius:8px; font-weight:800; margin-top:4px;">
       </div>
 
-      <input type="text" id="input-note" placeholder="Ex: Séance marche/course 3 validée, aucune douleur" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.85rem; margin-bottom: 10px;">
-
-      <button class="btn-timer" onclick="savePainEntry()" style="width: 100%; justify-content: center; padding: 10px;">
-        Enregistrer la note du jour
+      <button class="btn-primary" style="background:#334155; color:#fff;" onclick="toggleCloudSync()">
+        🔄 Activer le partage Cloud
       </button>
 
-      <div id="pain-history" style="margin-top: 16px;"></div>
+      <div id="cloud-status" style="margin-top:10px; font-size:0.8rem; color:var(--green); display:none;">
+        ✓ Synchronisé en direct avec Firebase
+      </div>
     </div>
 
   </section>
@@ -550,354 +474,544 @@
 
 <!-- BOTTOM BAR NAVIGATION -->
 <nav class="nav-bar">
-  <button class="nav-item active" onclick="navigate('comprendre')">
-    <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-    <span>Comprendre</span>
+  <button class="nav-btn active" onclick="switchNav('pitch')">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><line x1="2" y1="12" x2="22" y2="12"></line></svg>
+    <span>Direct</span>
   </button>
-  <button class="nav-item" onclick="navigate('exercices')">
-    <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v8H2z"></path><line x1="6" y1="1" x2="6" y2="23"></line><line x1="14" y1="1" x2="14" y2="23"></line></svg>
-    <span>Exercices</span>
+  <button class="nav-btn" onclick="switchNav('roster')">
+    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+    <span>Effectif</span>
   </button>
-  <button class="nav-item" onclick="navigate('reprise')">
-    <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-    <span>Reprise</span>
+  <button class="nav-btn" onclick="switchNav('export')">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+    <span>Affiche</span>
   </button>
-  <button class="nav-item" onclick="navigate('journal')">
-    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-    <span>Journal</span>
+  <button class="nav-btn" onclick="switchNav('cloud')">
+    <svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+    <span>Cloud</span>
   </button>
 </nav>
 
 <script>
-  /* NAVIGATION SYSTEM */
-  function navigate(viewId) {
-    document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-    
-    document.getElementById(`view-${viewId}`).classList.add('active');
-    
-    const navButtons = document.querySelectorAll('.nav-item');
-    if (viewId === 'comprendre') navButtons[0].classList.add('active');
-    if (viewId === 'exercices') navButtons[1].classList.add('active');
-    if (viewId === 'reprise') navButtons[2].classList.add('active');
-    if (viewId === 'journal') navButtons[3].classList.add('active');
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  /* EXERCISE DATABASE */
-  const exoData = {
-    1: [
-      {
-        id: "p1_soleus_iso",
-        title: "Soléaire Isométrique Assis (Charge lourde)",
-        pill: "Soléaire",
-        meta: "5 séries x 45s maintien (2 min repos)",
-        desc: "Assis avec les genoux à 90°, pieds à plat. Posez un poids lourd (sac à dos lesté, haltère ou pack d'eau de 10-20 kg) sur vos genoux. Montez sur demi-pointes et bloquez sans bouger.",
-        timer: 45
-      },
-      {
-        id: "p1_tib_post_ball",
-        title: "Tibial Postérieur avec balle entre talons",
-        pill: "Tibial Postérieur",
-        meta: "4 séries x 30s de maintien",
-        desc: "Debout, serrez fermement une balle de tennis entre vos deux talons. Montez légèrement sur demi-pointes en maintenant une forte pression interne sans écarter les chevilles.",
-        timer: 30
-      },
-      {
-        id: "p1_short_foot",
-        title: "Pied Court de Janda (Short Foot)",
-        pill: "Voûte plantaire",
-        meta: "3 séries x 10 contractions de 5s",
-        desc: "Pieds nus à plat au sol. Rapprochez la tête du gros orteil vers le talon sans recroqueviller les orteils pour creuser la voûte. Cela verrouille le pied et protège le tibia.",
-        timer: 30
-      },
-      {
-        id: "p1_glute_bridge",
-        title: "Pont Fessier Isométrique 1 Jambe",
-        pill: "Bassin & Fessiers",
-        meta: "3 séries x 30s par jambe",
-        desc: "Sur le dos, décollez le bassin et tendez une jambe. Gardez le bassin parfaitement droit. Un moyen fessier fort empêche le genou de rentrer vers l'intérieur (valgus dynamique).",
-        timer: 30
-      }
-    ],
-    2: [
-      {
-        id: "p2_heel_raise_bent",
-        title: "Mollet lourd sur marche genou fléchi",
-        pill: "Soléaire Excentrique",
-        meta: "3 séries x 10 à 12 reps lentes",
-        desc: "Sur une marche d'escalier sur un pied, maintenez le genou plié à 30°. Montez en 1 seconde, puis freinez la descente en 3 à 4 secondes complètes sous la marche.",
-        timer: 60
-      },
-      {
-        id: "p2_tibialis_raises",
-        title: "Tibialis Raises (Dos au mur)",
-        pill: "Tibial Antérieur",
-        meta: "3 séries x 20 reps contrôlées",
-        desc: "Adossé contre un mur, talons placés à 40 cm en avant. Levez les orteils et le devant du pied le plus haut possible vers vos tibias, marquez 1s en haut, puis reposez.",
-        timer: 45
-      },
-      {
-        id: "p2_band_inversion",
-        title: "Inversion active à l'élastique",
-        pill: "Cheville & Tendons",
-        meta: "3 séries x 15 reps par pied",
-        desc: "Attachez un élastique sur l'avant-pied. Ramenez la plante de pied vers l'intérieur contre la résistance de l'élastique en contrôlant le retour.",
-        timer: 45
-      },
-      {
-        id: "p2_step_down",
-        title: "Step-Down contrôlé depuis une marche",
-        pill: "Quadriceps & Bassin",
-        meta: "3 séries x 10 reps / jambe",
-        desc: "Debout sur une marche, descendez lentement le pied libre pour effleurer le sol avec le talon sans poser le poids, puis remontez en poussant sur la jambe d'appui.",
-        timer: 45
-      }
-    ],
-    3: [
-      {
-        id: "p3_pogo",
-        title: "Pogo Jumps (Rebonds élastiques)",
-        pill: "Élasticité du tendon",
-        meta: "4 séries x 20 secondes",
-        desc: "Petits rebonds légers sur place, genoux quasi verrouillés, uniquement par la flexion de la cheville. Visez un contact au sol minimal et sans bruit sourd.",
-        timer: 30
-      },
-      {
-        id: "p3_box_landing",
-        title: "Atterrissage amorti depuis une marche",
-        pill: "Absorption de choc",
-        meta: "3 séries x 8 réceptions silencieuses",
-        desc: "Laissez-vous tomber d'une marche de 15-20 cm et absorbez instantanément l'impact en fléchissant souplement chevilles et genoux. Aucun bruit d'impact !",
-        timer: 45
-      },
-      {
-        id: "p3_lateral_hops",
-        title: "Sauts latéraux 1 jambe amortis",
-        pill: "Stabilité 3D",
-        meta: "3 séries x 10 sauts par jambe",
-        desc: "Sautez d'un côté à l'autre sur une seule jambe en marquant 1 seconde d'arrêt complet et d'équilibre à chaque réception.",
-        timer: 45
-      }
+  /* MATCH STATE */
+  let matchData = {
+    teamA: "Domicile",
+    teamB: "Extérieur",
+    scoreA: 0,
+    scoreB: 0,
+    period: 1, // 1: 1ère MT, 2: 2ème MT, 3: Terminé
+    matchSeconds: 0,
+    isTimerRunning: false,
+    selectedAction: "goal",
+    events: [],
+    players: [
+      { id: 1, name: "Gardien", num: 1, isPlaying: true, minPlayed: 0, subTime: null },
+      { id: 2, name: "Défenseur D", num: 2, isPlaying: true, minPlayed: 0, subTime: null },
+      { id: 3, name: "Défenseur Axe", num: 4, isPlaying: true, minPlayed: 0, subTime: null },
+      { id: 4, name: "Défenseur G", num: 3, isPlaying: true, minPlayed: 0, subTime: null },
+      { id: 5, name: "Milieu Def", num: 6, isPlaying: true, minPlayed: 0, subTime: null },
+      { id: 6, name: "Milieu Relayeur", num: 8, isPlaying: true, minPlayed: 0, subTime: null },
+      { id: 7, name: "Meneur 10", num: 10, isPlaying: true, minPlayed: 0, subTime: null },
+      { id: 8, name: "Attaquant 9", num: 9, isPlaying: true, minPlayed: 0, subTime: null },
+      { id: 9, name: "Remplaçant 1", num: 12, isPlaying: false, minPlayed: 0, subTime: null },
+      { id: 10, name: "Remplaçant 2", num: 13, isPlaying: false, minPlayed: 0, subTime: null }
     ]
   };
 
-  let currentExoPhase = 1;
-  let activeIntervals = {};
+  /* NAVIGATION */
+  function switchNav(tabId) {
+    document.querySelectorAll('.view-tab').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+    
+    document.getElementById(`tab-${tabId}`).classList.add('active');
+    
+    const tabs = ['pitch', 'roster', 'export', 'cloud'];
+    const idx = tabs.indexOf(tabId);
+    if (idx >= 0) document.querySelectorAll('.nav-btn')[idx].classList.add('active');
 
-  function switchExoPhase(p) {
-    currentExoPhase = p;
-    document.querySelectorAll('.sub-tab-btn').forEach((btn, idx) => {
-      btn.classList.toggle('active', (idx + 1) === p);
-    });
-    renderExos();
-  }
-
-  function getStoredExos() {
-    try { return JSON.parse(localStorage.getItem('rehab_exos') || '{}'); } catch { return {}; }
-  }
-
-  function toggleExoDone(id) {
-    const data = getStoredExos();
-    data[id] = !data[id];
-    localStorage.setItem('rehab_exos', JSON.stringify(data));
-    renderExos();
-  }
-
-  function startTimer(id, defaultSec) {
-    if (activeIntervals[id]) {
-      clearInterval(activeIntervals[id].timer);
-      delete activeIntervals[id];
-      renderExos();
-      return;
-    }
-
-    let left = defaultSec;
-    const timer = setInterval(() => {
-      left--;
-      const el = document.getElementById(`time-${id}`);
-      if (el) el.textContent = `${left}s`;
-      if (left <= 0) {
-        clearInterval(timer);
-        delete activeIntervals[id];
-        if (navigator.vibrate) navigator.vibrate([150, 50, 150]);
-        renderExos();
-      }
-    }, 1000);
-
-    activeIntervals[id] = { timer, left };
-    renderExos();
-  }
-
-  function renderExos() {
-    const container = document.getElementById('exo-container');
-    const list = exoData[currentExoPhase];
-    const stored = getStoredExos();
-
-    container.innerHTML = list.map(item => {
-      const isDone = !!stored[item.id];
-      const isRunning = !!activeIntervals[item.id];
-
-      return `
-        <div class="exo-item ${isDone ? 'done' : ''}">
-          <div class="exo-head">
-            <div>
-              <div class="exo-title">${item.title}</div>
-              <div class="exo-meta">📊 ${item.meta}</div>
-            </div>
-            <span class="exo-pill">${item.pill}</span>
-          </div>
-          <div class="exo-instructions">${item.desc}</div>
-          <div class="exo-actions">
-            <button class="btn-timer" onclick="startTimer('${item.id}', ${item.timer})">
-              ⏱ ${isRunning ? 'Arrêter (' + activeIntervals[item.id].left + 's)' : 'Lancer repos (' + item.timer + 's)'}
-            </button>
-            <div class="check-btn" onclick="toggleExoDone('${item.id}')">
-              <span class="check-box"></span>
-              <span>${isDone ? 'Validé' : 'À faire'}</span>
-            </div>
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
-
-  /* RETURN TO RUN PROTOCOL */
-  const rtrStages = [
-    { s: 1, title: "Semaine 1 : Test d'impact", detail: "10x (1 min course très lente / 1 min marche) = 10 min de course totale" },
-    { s: 2, title: "Semaine 2 : Consolidation", detail: "7x (2 min course / 1 min marche) = 14 min de course" },
-    { s: 3, title: "Semaine 3 : Montée du volume", detail: "6x (3 min course / 1 min marche) = 18 min de course" },
-    { s: 4, title: "Semaine 4 : Cap des 20 min", detail: "5x (4 min course / 1 min marche) = 20 min de course" },
-    { s: 5, title: "Semaine 5 : Continuité", detail: "4x (6 min course / 1 min marche) = 24 min de course" },
-    { s: 6, title: "Semaine 6 : Fractionné long", detail: "3x (8 min course / 2 min marche) = 24 min de course" },
-    { s: 7, title: "Semaine 7 : Quasi continu", detail: "2x (12 min course / 2 min marche) = 24 min de course" },
-    { s: 8, title: "Semaine 8 : Course continue", detail: "25 à 30 min en continu sur sol souple en aisance respiratoire" }
-  ];
-
-  function renderRTR() {
-    const savedStep = parseInt(localStorage.getItem('rtr_step') || '1');
-    const container = document.getElementById('rtr-list');
-
-    container.innerHTML = rtrStages.map(step => {
-      const isCur = step.s === savedStep;
-      const isPast = step.s < savedStep;
-
-      return `
-        <div class="rtr-step ${isCur ? 'current' : ''}">
-          <div class="rtr-info">
-            <h4>${step.title} ${isPast ? '✅' : ''}</h4>
-            <p>${step.detail}</p>
-          </div>
-          <button class="btn-timer" style="background:${isCur ? 'var(--teal)' : '#cbd5e1'}; font-size:0.75rem;" onclick="setRTRStep(${step.s})">
-            ${isCur ? 'En cours' : (isPast ? 'Revoir' : 'Activer')}
-          </button>
-        </div>
-      `;
-    }).join('');
-  }
-
-  function setRTRStep(s) {
-    localStorage.setItem('rtr_step', s);
-    renderRTR();
-  }
-
-  /* METRONOME SYSTEM (Web Audio API) */
-  let audioCtx = null;
-  let isMetronomeOn = false;
-  let bpm = 175;
-  let metronomeTimer = null;
-
-  function updateBpm(v) {
-    bpm = v;
-    document.getElementById('bpm-val').textContent = `${v} PPM`;
-    if (isMetronomeOn) {
-      clearInterval(metronomeTimer);
-      startMetronomeLoop();
+    if (tabId === 'export') {
+      renderExportCanvas();
     }
   }
 
-  function playTick() {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(880, audioCtx.currentTime); // 880 Hz crisp click
-    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.start();
-    osc.stop(audioCtx.currentTime + 0.05);
-  }
+  /* CHRONO ENGINE */
+  let matchInterval = null;
 
-  function startMetronomeLoop() {
-    const intervalMs = (60 / bpm) * 1000;
-    metronomeTimer = setInterval(playTick, intervalMs);
-  }
-
-  function toggleMetronome() {
-    const btn = document.getElementById('btn-metronome');
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-    if (isMetronomeOn) {
-      clearInterval(metronomeTimer);
-      isMetronomeOn = false;
-      btn.textContent = "▶ Démarrer le métronome";
-      btn.style.background = "var(--teal)";
+  function toggleMatchClock() {
+    const btn = document.getElementById('btn-clock');
+    if (matchData.isTimerRunning) {
+      clearInterval(matchInterval);
+      matchData.isTimerRunning = false;
+      btn.textContent = "▶ Reprendre chrono";
+      btn.classList.remove('active');
     } else {
-      isMetronomeOn = true;
-      btn.textContent = "⏹ Arrêter le métronome";
-      btn.style.background = "var(--red)";
-      playTick();
-      startMetronomeLoop();
+      matchData.isTimerRunning = true;
+      btn.textContent = "⏸ Pause chrono";
+      btn.classList.add('active');
+      matchInterval = setInterval(matchTick, 1000);
     }
   }
 
-  /* PAIN LOG SYSTEM */
-  function getPainHistory() {
-    try { return JSON.parse(localStorage.getItem('pain_history') || '[]'); } catch { return []; }
+  function matchTick() {
+    matchData.matchSeconds++;
+    updateClockDisplay();
+
+    // Increment playing time for players on pitch every 60s
+    if (matchData.matchSeconds % 60 === 0) {
+      matchData.players.forEach(p => {
+        if (p.isPlaying) p.minPlayed++;
+      });
+      renderRoster();
+    }
   }
 
-  function savePainEntry() {
-    const pain = document.getElementById('input-pain').value;
-    const note = document.getElementById('input-note').value.trim() || "Aucune note";
-    const date = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
-
-    const hist = getPainHistory();
-    hist.unshift({ date, pain, note });
-    localStorage.setItem('pain_history', JSON.stringify(hist.slice(0, 10)));
-
-    document.getElementById('input-note').value = "";
-    renderPainHistory();
+  function updateClockDisplay() {
+    const m = Math.floor(matchData.matchSeconds / 60);
+    const s = matchData.matchSeconds % 60;
+    document.getElementById('match-clock').textContent = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
   }
 
-  function renderPainHistory() {
-    const hist = getPainHistory();
-    const container = document.getElementById('pain-history');
+  function switchPeriod() {
+    if (matchData.period === 1) {
+      matchData.period = 2;
+      matchData.matchSeconds = 45 * 60; // Démarrer 2ème MT à 45:00
+      document.getElementById('match-period-label').textContent = "2ème Mi-temps";
+    } else {
+      matchData.period = 3;
+      clearInterval(matchInterval);
+      matchData.isTimerRunning = false;
+      document.getElementById('match-period-label').textContent = "Match Terminé";
+      document.getElementById('btn-clock').textContent = "Terminé";
+      document.getElementById('btn-clock').classList.remove('active');
+    }
+    updateClockDisplay();
+  }
 
-    if (!hist.length) {
-      container.innerHTML = `<p style="font-size:0.8rem; color:var(--text-muted); text-align:center;">Aucune entrée enregistrée pour l'instant.</p>`;
+  function resetScore() {
+    if (confirm("Réinitialiser le match ?")) {
+      matchData.scoreA = 0;
+      matchData.scoreB = 0;
+      matchData.matchSeconds = 0;
+      matchData.events = [];
+      clearInterval(matchInterval);
+      matchData.isTimerRunning = false;
+      document.getElementById('score-a').textContent = "0";
+      document.getElementById('score-b').textContent = "0";
+      updateClockDisplay();
+      drawPitch();
+      renderEvents();
+      renderStats();
+    }
+  }
+
+  function renameTeam(side) {
+    const current = side === 'a' ? matchData.teamA : matchData.teamB;
+    const name = prompt("Nom de l'équipe :", current);
+    if (!name) return;
+    if (side === 'a') {
+      matchData.teamA = name;
+      document.getElementById('name-team-a').textContent = name + " ✏️";
+    } else {
+      matchData.teamB = name;
+      document.getElementById('name-team-b').textContent = name + " ✏️";
+    }
+  }
+
+  /* PITCH CANVAS DRAWING & SHOT MAP */
+  const canvas = document.getElementById('pitchCanvas');
+  const ctx = canvas.getContext('2d');
+
+  function drawPitch() {
+    const w = canvas.width;
+    const h = canvas.height;
+
+    // Fond herbe rayée
+    ctx.fillStyle = "#15803d";
+    ctx.fillRect(0, 0, w, h);
+
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    for (let i = 0; i < w; i += 60) {
+      ctx.fillRect(i, 0, 30, h);
+    }
+
+    // Lignes blanches
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.75)";
+    ctx.lineWidth = 2.5;
+
+    // Cadre extérieur
+    ctx.strokeRect(15, 15, w - 30, h - 30);
+
+    // Ligne médiane & rond central
+    ctx.beginPath();
+    ctx.moveTo(w / 2, 15);
+    ctx.lineTo(w / 2, h - 15);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(w / 2, h / 2, 45, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.fillStyle = "#fff";
+    ctx.beginPath();
+    ctx.arc(w / 2, h / 2, 3, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Surfaces de réparation (Gauche et Droite)
+    drawPenaltyBox(15, (h - 150) / 2, 75, 150, 40, 80, true);
+    drawPenaltyBox(w - 90, (h - 150) / 2, 75, 150, 40, 80, false);
+
+    // Marqueurs d'événements posés
+    matchData.events.forEach(ev => {
+      const px = (ev.x / 100) * w;
+      const py = (ev.y / 100) * h;
+
+      ctx.beginPath();
+      ctx.arc(px, py, 9, 0, Math.PI * 2);
+
+      if (ev.type === 'goal') ctx.fillStyle = "#10b981"; // Vert But
+      else if (ev.type === 'onTarget') ctx.fillStyle = "#38bdf8"; // Bleu Cadré
+      else if (ev.type === 'offTarget') ctx.fillStyle = "#ffffff"; // Blanc Non cadré
+      else ctx.fillStyle = "#f59e0b"; // Jaune Faute
+
+      ctx.fill();
+      ctx.strokeStyle = "#000";
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Texte minute
+      ctx.fillStyle = "#000";
+      ctx.font = "bold 8px sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText(`${ev.min}'`, px, py + 3);
+    });
+  }
+
+  function drawPenaltyBox(x, y, w, h, gw, gh, isLeft) {
+    ctx.strokeRect(x, y, w, h); // Grande surface
+    const gx = isLeft ? 15 : canvas.width - 15 - 30;
+    ctx.strokeRect(gx, (canvas.height - gh) / 2, 30, gh); // 6 mètres
+
+    // Point de pénalty
+    const spotX = isLeft ? x + 55 : x + 20;
+    ctx.fillStyle = "#fff";
+    ctx.beginPath();
+    ctx.arc(spotX, canvas.height / 2, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  /* ACTION PICKER & PITCH CLICK INTERACTION */
+  function selectAction(type) {
+    matchData.selectedAction = type;
+    document.querySelectorAll('.action-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(`act-${type}`).classList.add('active');
+  }
+
+  canvas.addEventListener('pointerdown', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const clickY = e.clientY - rect.top;
+
+    const xPct = Math.round((clickX / rect.width) * 100);
+    const yPct = Math.round((clickY / rect.height) * 100);
+
+    const min = Math.floor(matchData.matchSeconds / 60) + 1;
+    const type = matchData.selectedAction;
+
+    // Déterminer le joueur impliqué
+    const activePlayers = matchData.players.filter(p => p.isPlaying).map(p => p.name);
+    let scorer = "Équipe";
+    if (type === 'goal') {
+      scorer = prompt("Buteur :", activePlayers[0] || "Buteur") || "Buteur";
+      matchData.scoreA++;
+      document.getElementById('score-a').textContent = matchData.scoreA;
+    }
+
+    matchData.events.unshift({
+      id: Date.now(),
+      min: min,
+      type: type,
+      x: xPct,
+      y: yPct,
+      player: scorer
+    });
+
+    drawPitch();
+    renderEvents();
+    renderStats();
+  });
+
+  function renderEvents() {
+    const feed = document.getElementById('events-timeline');
+    if (!matchData.events.length) {
+      feed.innerHTML = `<p style="color:var(--text-muted); text-align:center; padding:10px;">Aucune action enregistrée.</p>`;
       return;
     }
 
-    container.innerHTML = `<div style="font-size:0.85rem; font-weight:800; margin-bottom:8px;">Derniers relevés :</div>` +
-      hist.map(item => `
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 10px; border-bottom:1px solid var(--border); font-size:0.82rem;">
-          <div>
-            <strong>${item.date}</strong> : <span style="color:var(--text-muted);">${item.note}</span>
-          </div>
-          <span style="font-weight:800; padding:2px 8px; border-radius:12px; background:${item.pain > 4 ? 'var(--red-light)' : 'var(--teal-light)'}; color:${item.pain > 4 ? 'var(--red)' : 'var(--teal)'};">
-            ${item.pain} / 10
-          </span>
+    feed.innerHTML = matchData.events.map(ev => {
+      let icon = "⚽";
+      let label = "But";
+      if (ev.type === 'onTarget') { icon = "🎯"; label = "Tir cadré"; }
+      if (ev.type === 'offTarget') { icon = "💨"; label = "Tir non cadré"; }
+      if (ev.type === 'foul') { icon = "⚠️"; label = "Faute concédée"; }
+
+      return `
+        <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+          <span><strong>${ev.min}'</strong> ${icon} ${label} ${ev.type === 'goal' ? `(${ev.player})` : ''}</span>
+          <button style="background:none; border:none; color:var(--red); font-size:0.75rem; cursor:pointer;" onclick="deleteEvent(${ev.id})">✕</button>
         </div>
-      `).join('');
+      `;
+    }).join('');
   }
 
-  // Initial render
-  renderExos();
-  renderRTR();
-  renderPainHistory();
+  function deleteEvent(id) {
+    const idx = matchData.events.findIndex(e => e.id === id);
+    if (idx !== -1) {
+      if (matchData.events[idx].type === 'goal' && matchData.scoreA > 0) {
+        matchData.scoreA--;
+        document.getElementById('score-a').textContent = matchData.scoreA;
+      }
+      matchData.events.splice(idx, 1);
+      drawPitch();
+      renderEvents();
+      renderStats();
+    }
+  }
+
+  function renderStats() {
+    const shots = matchData.events.filter(e => e.type === 'goal' || e.type === 'onTarget' || e.type === 'offTarget').length;
+    const onTarget = matchData.events.filter(e => e.type === 'goal' || e.type === 'onTarget').length;
+    const fouls = matchData.events.filter(e => e.type === 'foul').length;
+
+    document.getElementById('stat-shots').textContent = shots;
+    document.getElementById('stat-on-target').textContent = onTarget;
+    document.getElementById('stat-fouls').textContent = fouls;
+  }
+
+  /* ROSTER & SUBSTITUTION ENGINE */
+  function renderRoster() {
+    const startersContainer = document.getElementById('lineup-starters');
+    const subsContainer = document.getElementById('lineup-subs');
+
+    const starters = matchData.players.filter(p => p.isPlaying);
+    const subs = matchData.players.filter(p => !p.isPlaying);
+
+    startersContainer.innerHTML = starters.map(p => `
+      <div class="player-row">
+        <div>
+          <span class="player-badge">${p.num}</span>
+          <strong>${p.name}</strong>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-weight:800; color:var(--green);">${p.minPlayed}'</span>
+          <button class="btn-sub sub-out" onclick="substitutePlayer(${p.id})">Sortir ⬇️</button>
+        </div>
+      </div>
+    `).join('');
+
+    subsContainer.innerHTML = subs.map(p => `
+      <div class="player-row">
+        <div>
+          <span class="player-badge" style="background:#475569;">${p.num}</span>
+          <span style="color:var(--text-muted);">${p.name}</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-weight:700; color:var(--text-muted);">${p.minPlayed}'</span>
+          <button class="btn-sub sub-in" onclick="substitutePlayer(${p.id})">Entrer ⬆️</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function substitutePlayer(playerId) {
+    const player = matchData.players.find(p => p.id === playerId);
+    if (!player) return;
+
+    const currentMin = Math.floor(matchData.matchSeconds / 60);
+
+    if (player.isPlaying) {
+      player.isPlaying = false;
+      matchData.events.unshift({
+        id: Date.now(),
+        min: currentMin,
+        type: 'sub',
+        x: 50,
+        y: 95,
+        player: `Remplacement : ${player.name} sort`
+      });
+    } else {
+      player.isPlaying = true;
+      matchData.events.unshift({
+        id: Date.now(),
+        min: currentMin,
+        type: 'sub',
+        x: 50,
+        y: 95,
+        player: `Remplacement : ${player.name} entre`
+      });
+    }
+
+    renderRoster();
+    renderEvents();
+  }
+
+  function addPlayerPrompt(type) {
+    const name = prompt("Nom du joueur :");
+    if (!name) return;
+    const num = parseInt(prompt("Numéro de maillot :", "7")) || 7;
+    matchData.players.push({
+      id: Date.now(),
+      name: name,
+      num: num,
+      isPlaying: type === 'titulaire',
+      minPlayed: 0
+    });
+    renderRoster();
+  }
+
+  /* POST-MATCH GRAPHIC CARD GENERATOR (CANVAS) */
+  function renderExportCanvas() {
+    const expCanvas = document.getElementById('exportCanvas');
+    const xctx = expCanvas.getContext('2d');
+    const w = expCanvas.width;
+    const h = expCanvas.height;
+
+    // Dark sports gradient background
+    const grad = xctx.createLinearGradient(0, 0, w, h);
+    grad.addColorStop(0, "#0f172a");
+    grad.addColorStop(1, "#020617");
+    xctx.fillStyle = grad;
+    xctx.fillRect(0, 0, w, h);
+
+    // Decorative pitch glow
+    xctx.fillStyle = "rgba(16, 185, 129, 0.08)";
+    xctx.beginPath();
+    xctx.arc(w / 2, 200, 280, 0, Math.PI * 2);
+    xctx.fill();
+
+    // Top Header Badge
+    xctx.fillStyle = "#10b981";
+    xctx.font = "bold 20px -apple-system, sans-serif";
+    xctx.textAlign = "center";
+    xctx.fillText("MATCHDAY TRACKER • COUP DE SIFFLET FINAL", w / 2, 60);
+
+    // Team names
+    xctx.fillStyle = "#94a3b8";
+    xctx.font = "bold 24px sans-serif";
+    xctx.fillText(matchData.teamA.toUpperCase(), w / 4, 130);
+    xctx.fillText(matchData.teamB.toUpperCase(), (w / 4) * 3, 130);
+
+    // Score Board Big Display
+    xctx.fillStyle = "#ffffff";
+    xctx.font = "900 84px sans-serif";
+    xctx.fillText(`${matchData.scoreA}  -  ${matchData.scoreB}`, w / 2, 200);
+
+    // Scorers section
+    xctx.fillStyle = "#38bdf8";
+    xctx.font = "bold 20px sans-serif";
+    xctx.fillText("BUTEURS", w / 2, 260);
+
+    const goals = matchData.events.filter(e => e.type === 'goal');
+    xctx.fillStyle = "#ffffff";
+    xctx.font = "18px sans-serif";
+
+    if (!goals.length) {
+      xctx.fillStyle = "#64748b";
+      xctx.fillText("Aucun but inscrit", w / 2, 290);
+    } else {
+      goals.forEach((g, i) => {
+        xctx.fillText(`⚽ ${g.player} (${g.min}')`, w / 2, 295 + i * 26);
+      });
+    }
+
+    // Stats Table Divider
+    const statsY = 380;
+    xctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
+    xctx.lineWidth = 1.5;
+    xctx.beginPath();
+    xctx.moveTo(80, statsY);
+    xctx.lineTo(w - 80, statsY);
+    xctx.stroke();
+
+    // Stats Comparison
+    const totalShots = matchData.events.filter(e => e.type === 'goal' || e.type === 'onTarget' || e.type === 'offTarget').length;
+    const cadrés = matchData.events.filter(e => e.type === 'goal' || e.type === 'onTarget').length;
+    const fautes = matchData.events.filter(e => e.type === 'foul').length;
+
+    drawStatRow(xctx, "Tirs au but", totalShots, "-", statsY + 40, w);
+    drawStatRow(xctx, "Tirs cadrés", cadrés, "-", statsY + 80, w);
+    drawStatRow(xctx, "Fautes commises", fautes, "-", statsY + 120, w);
+
+    // Mini Shot Map Preview in Export Card
+    const mapY = 560;
+    xctx.fillStyle = "#10b981";
+    xctx.font = "bold 20px sans-serif";
+    xctx.fillText("CARTE DES TIRS & ACTIONS", w / 2, mapY);
+
+    // Draw embedded mini pitch
+    xctx.drawImage(canvas, (w - 460) / 2, mapY + 20, 460, 280);
+
+    // Footer Watermark
+    xctx.fillStyle = "#475569";
+    xctx.font = "14px sans-serif";
+    xctx.fillText("Généré en direct depuis le banc de touche", w / 2, h - 30);
+  }
+
+  function drawStatRow(xctx, label, valA, valB, y, w) {
+    xctx.fillStyle = "#94a3b8";
+    xctx.font = "bold 18px sans-serif";
+    xctx.textAlign = "center";
+    xctx.fillText(label, w / 2, y);
+
+    xctx.fillStyle = "#ffffff";
+    xctx.font = "bold 20px sans-serif";
+    xctx.fillText(valA.toString(), w / 4, y);
+    xctx.fillText(valB.toString(), (w / 4) * 3, y);
+  }
+
+  function downloadExportImage() {
+    renderExportCanvas();
+    const expCanvas = document.getElementById('exportCanvas');
+    const image = expCanvas.toDataURL("image/png");
+    const link = document.createElement('a');
+    link.download = `recap_match_${matchData.teamA}_vs_${matchData.teamB}.png`;
+    link.href = image;
+    link.click();
+  }
+
+  async function shareExportImage() {
+    renderExportCanvas();
+    const expCanvas = document.getElementById('exportCanvas');
+    expCanvas.toBlob(async (blob) => {
+      const file = new File([blob], "recap_match.png", { type: "image/png" });
+      if (navigator.share && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: `Résultat : ${matchData.teamA} vs ${matchData.teamB}`,
+            text: `Score final : ${matchData.scoreA} - ${matchData.scoreB} !`
+          });
+        } catch (err) {
+          console.log("Partage annulé");
+        }
+      } else {
+        downloadExportImage();
+      }
+    });
+  }
+
+  /* OPTIONAL FIREBASE HOOK */
+  function toggleCloudSync() {
+    const code = document.getElementById('cloud-match-code').value.trim();
+    if (!code) return;
+    document.getElementById('cloud-status').style.display = 'block';
+    document.getElementById('cloud-status').textContent = `✓ Connecté au salon : ${code} (En attente de vos identifiants Firebase)`;
+    alert("Prêt pour la synchronisation ! Dès que vous collerez vos identifiants Firebase Config, plusieurs téléphones sur le banc pourront modifier ce même match en direct.");
+  }
+
+  // Initial runs
+  drawPitch();
+  renderRoster();
+  renderEvents();
+  renderStats();
 </script>
 
 </body>
